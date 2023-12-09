@@ -1,7 +1,8 @@
 from rest_framework import viewsets, mixins
 
-from .models import Game
 from core.pagination import StandardPagination
+from .filters import GameFilter
+from .models import Game
 from .serializers import GameSerializer
 
 
@@ -12,3 +13,5 @@ class GameViewSet(
     queryset = Game.objects.all()
     serializer_class = GameSerializer
     pagination_class = StandardPagination
+    filterset_class = GameFilter
+    ordering_fields = ["name", "likes", "released", "metacritic"]
