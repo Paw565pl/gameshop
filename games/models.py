@@ -28,9 +28,7 @@ class Screenshot(models.Model):
 
 
 class Review(models.Model):
-    author = models.CharField(
-        max_length=255, unique=True, primary_key=True
-    )  # TODO: check if user can create reviews for multiple games
+    author = models.CharField(max_length=255, unique=True, primary_key=True)
     content = models.TextField()
 
 
