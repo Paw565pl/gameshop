@@ -110,6 +110,21 @@ sqlparse = "0.2.4"
 json = ["django-jsoneditor (>=0.0.12)", "jsonfield (>=2.0.2)"]
 
 [[package]]
+name = "drf-nested-routers"
+version = "0.93.4"
+description = "Nested resources for the Django Rest Framework"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "drf-nested-routers-0.93.4.tar.gz", hash = "sha256:01aa556b8c08608bb74fb34f6ca065a5183f2cda4dc0478192cc17a2581d71b0"},
+    {file = "drf_nested_routers-0.93.4-py2.py3-none-any.whl", hash = "sha256:996b77f3f4dfaf64569e7b8f04e3919945f90f95366838ca5b8bed9dd709d6c5"},
+]
+
+[package.dependencies]
+Django = ">=1.11"
+djangorestframework = ">=3.6.0"
+
+[[package]]
 name = "pymongo"
 version = "3.13.0"
 description = "Python driver for MongoDB <http://www.mongodb.org>"
@@ -273,4 +288,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "2c4651a9208a11c371c2e6994621d71669edbb38080bb14466749dde16e3c3b6"
+content-hash = "34a1f61028bcf2572ebdb8b2dc548fff76c6f372ca86ff0ec6a03f9bc906c0e8"
