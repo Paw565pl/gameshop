@@ -6,8 +6,10 @@ from django.conf import settings
 
 def get_mongo_collection(collection_name: str) -> Collection | None:
     db_name = settings.DATABASES["default"]["NAME"]
+    db_host = settings.DATABASES["default"]["CLIENT"]["host"]
+    db_port = settings.DATABASES["default"]["CLIENT"]["port"]
 
-    client: MongoClient = database.connect("")
+    client: MongoClient = database.connect(db_name, host=db_host, port=db_port)
     db: Database = client[db_name]
 
     collections = db.list_collection_names()
