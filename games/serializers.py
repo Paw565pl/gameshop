@@ -1,5 +1,7 @@
 from rest_framework import serializers
+
 from .models import Game, Genre, Platform, Developer, Screenshot, Review
+from core.utils import get_mongo_collection
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -36,6 +38,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         username = self.context["request"].user.username
         game_id = self.context["view"].kwargs["game_pk"]
+        content = validated_data["content"]
 
         game_queryset = Game.objects.filter(pk=game_id)
 
@@ -46,7 +49,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         game = game_queryset.first()
         new_review = {
             "author": username,
-            "content": validated_data["content"],
+            "content": content,
         }
         game.reviews.append(new_review)
         game.save()
@@ -55,19 +58,18 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         username = self.context["request"].user.username
-        game_id = self.context["view"].kwargs["game_pk"]
+        game_id = int(self.context["view"].kwargs["game_pk"])
+        new_content = validated_data.get("content")
 
-        game = Game.objects.filter(pk=game_id, reviews={"author": username}).first()
-        reviews = game.reviews
-        updated_review = None
+        games_collection = get_mongo_collection("games_game")
+        games_collection.update_one(
+            {"id": game_id, "reviews.author": username},
+            {"$set": {"reviews.$.content": new_content}},
+        )
+        updated_review = games_collection.find_one(
+            {"id": game_id, "reviews.author": username}, {"reviews.$": 1}
+        )["reviews"][0]
 
-        for review in reviews:
-            if review["author"] == username:
-                review["content"] = validated_data.get("content", review["content"])
-                updated_review = review
-                break
-
-        game.save()
         return updated_review
 
 
