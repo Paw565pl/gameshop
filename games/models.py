@@ -71,7 +71,7 @@ class Game(models.Model):
     description_raw = models.TextField(null=True, blank=True)
 
     likes = models.ArrayReferenceField(to=Like, on_delete=models.PROTECT)
-    dis_likes = models.ArrayReferenceField(to=DisLike, on_delete=models.PROTECT)
+    dislikes = models.ArrayReferenceField(to=DisLike, on_delete=models.PROTECT)
 
     genres = models.ArrayReferenceField(to=Genre, on_delete=models.PROTECT)
     platforms = models.ArrayReferenceField(to=Platform, on_delete=models.PROTECT)
