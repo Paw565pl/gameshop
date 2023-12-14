@@ -12,35 +12,11 @@ class GameFilter(filters.FilterSet):
     min_metacritic = filters.NumberFilter(field_name="metacritic", lookup_expr="lte")
     max_metacritic = filters.NumberFilter(field_name="metacritic", lookup_expr="gte")
     genre = filters.CharFilter(
-        label="Genre name", field_name="slug", method="filter_by_genre"
+        label="Genre name", field_name="genres__name", lookup_expr="iexact"
     )
     platform = filters.CharFilter(
-        label="Platform name", field_name="slug", method="filter_by_platform"
+        label="Platform name", field_name="platforms__name", lookup_expr="iexact"
     )
     developer = filters.CharFilter(
-        label="Developer name", field_name="slug", method="filter_by_developer"
+        label="Developer name", field_name="developers__name", lookup_expr="iexact"
     )
-
-    @staticmethod
-    def filter_by_genre(queryset, name, value):
-        return queryset.filter(
-            genres={
-                name: value,
-            }
-        )
-
-    @staticmethod
-    def filter_by_platform(queryset, name, value):
-        return queryset.filter(
-            platforms={
-                name: value,
-            }
-        )
-
-    @staticmethod
-    def filter_by_developer(queryset, name, value):
-        return queryset.filter(
-            developers={
-                name: value,
-            }
-        )
