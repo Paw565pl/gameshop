@@ -1,6 +1,8 @@
 import json
 from django.core.management.base import BaseCommand, CommandError
-from games.models import Game, Genre, Platform, Developer
+from tqdm import tqdm
+
+from games.models import Game, Genre, Platform, Developer, Screenshot
 
 
 class Command(BaseCommand):
@@ -11,36 +13,60 @@ class Command(BaseCommand):
 
         try:
             with open("./data/data.json", "r") as f:
-                games_objects = []
-                genres_objects = []
-                platforms_objects = []
-                developers_objects = []
+                games_json = json.load(f)
 
-                games = json.load(f)
+            games_objects = []
 
-                for game in games:
-                    genres_list = [
-                        genres_objects.append(Genre(**genre))
-                        for genre in game["genres"]
-                    ]
-                    platforms_list = [
-                        platforms_objects.append(Platform(**platform))
-                        for platform in game["platforms"]
-                    ]
-                    developers_list = [
-                        developers_objects.append(Developer(**developer))
-                        for developer in game["developers"]
-                    ]
+            for game in tqdm(games_json):
+                array_reference_fields = [
+                    "genres",
+                    "platforms",
+                    "developers",
+                    "screenshots",
+                ]
+                filtered_game = {
+                    k: v for k, v in game.items() if k not in array_reference_fields
+                }
 
-                    games_objects.append(Game(**game))
+                game_obj = Game(**filtered_game)
 
-                Game.objects.bulk_create(games_objects)
-                Genre.objects.bulk_create(list(set(genres_objects)))
-                Platform.objects.bulk_create(list(set(platforms_objects)))
-                Developer.objects.bulk_create(list(set(developers_objects)))
+                genres_list = []
+                for genre in game["genres"]:
+                    genre_obj, created = Genre.objects.get_or_create(
+                        name=genre["name"], slug=genre["slug"]
+                    )
 
-        except Exception as e:
-            print(e)
+                    if created:
+                        genre_obj.background_image = genre["background_image"]
+                        genre_obj.save()
+
+                    genres_list.append(genre_obj)
+
+                platforms_list = [
+                    Platform.objects.get_or_create(**platform)[0]
+                    for platform in game["platforms"]
+                ]
+
+                developers_list = [
+                    Developer.objects.get_or_create(**developer)[0]
+                    for developer in game["developers"]
+                ]
+
+                screenshots_list = [
+                    Screenshot.objects.get_or_create(**screenshot)[0]
+                    for screenshot in game["screenshots"]
+                ]
+
+                game_obj.genres.add(*genres_list)
+                game_obj.platforms.add(*platforms_list)
+                game_obj.developers.add(*developers_list)
+                game_obj.screenshots.add(*screenshots_list)
+
+                games_objects.append(game_obj)
+
+            Game.objects.bulk_create(games_objects)
+
+        except Exception:
             raise CommandError(
                 "something went wrong! maybe there is already data in the database"
             )
