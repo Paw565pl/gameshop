@@ -3,8 +3,6 @@ from djongo import models
 
 
 # Create your models here.
-
-
 class Genre(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True)
