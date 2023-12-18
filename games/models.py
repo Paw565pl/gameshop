@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core import validators
 from djongo import models
 
 
@@ -36,8 +36,8 @@ class Developer(models.Model):
 
 class Screenshot(models.Model):
     image = models.URLField()
-    width = models.IntegerField()
-    height = models.IntegerField()
+    width = models.IntegerField(null=True, blank=True)
+    height = models.IntegerField(null=True, blank=True)
 
     objects = models.DjongoManager()
 
@@ -45,7 +45,12 @@ class Screenshot(models.Model):
 class Review(models.Model):
     author = models.CharField(max_length=255)
     is_positive = models.BooleanField()
-    content = models.TextField()
+    content = models.TextField(
+        validators=[
+            validators.MinLengthValidator(10),
+            validators.MaxLengthValidator(1000),
+        ]
+    )
 
     objects = models.DjongoManager()
 
@@ -59,7 +64,9 @@ class Game(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     released = models.DateField(null=True, blank=True)
     metacritic = models.IntegerField(
-        null=True, blank=True, validators=[MinValueValidator(0), MaxValueValidator(100)]
+        null=True,
+        blank=True,
+        validators=[validators.MinValueValidator(0), validators.MaxValueValidator(100)],
     )
     background_image = models.URLField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
@@ -70,9 +77,7 @@ class Game(models.Model):
     developers = models.ArrayReferenceField(to=Developer, on_delete=models.PROTECT)
 
     screenshots = models.ArrayReferenceField(to=Screenshot)
-
     reviews = models.ArrayReferenceField(to=Review)
-    reviews_count = models.IntegerField(default=0)
 
     objects = models.DjongoManager()
 
