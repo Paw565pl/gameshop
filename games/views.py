@@ -1,5 +1,4 @@
-from rest_framework import viewsets, mixins, permissions
-from rest_framework.exceptions import NotFound
+from rest_framework import viewsets, mixins, permissions, exceptions
 
 from .filters import GameFilter
 from .models import Game, Review
@@ -26,6 +25,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
         game = Game.objects.filter(pk=game_id).count()
 
         if game == 0:
-            raise NotFound()
+            raise exceptions.NotFound()
 
         return Review.objects.filter(game__id=game_id)
