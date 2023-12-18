@@ -55,7 +55,6 @@ class GameSerializer(serializers.ModelSerializer):
     genres = GenreSerializer(many=True)
     platforms = PlatformSerializer(many=True)
     developers = DeveloperSerializer(many=True)
-    screenshots = ScreenshotSerializer(many=True)
 
     class Meta:
         model = Game
@@ -72,5 +71,4 @@ class GameSerializer(serializers.ModelSerializer):
             "genres",
             "platforms",
             "developers",
-            "screenshots",
         ]
