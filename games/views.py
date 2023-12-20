@@ -34,3 +34,9 @@ class ReviewViewSet(viewsets.ModelViewSet):
         check_if_game_exists(game_id)
 
         return Review.objects.filter(game__id=game_id)
+
+    def create(self, request, *args, **kwargs):
+        game_id = self.kwargs["game_pk"]
+        check_if_game_exists(game_id)
+
+        return super().create(request, *args, **kwargs)
