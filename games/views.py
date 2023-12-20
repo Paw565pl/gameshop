@@ -1,9 +1,10 @@
-from rest_framework import viewsets, permissions, exceptions
+from rest_framework import viewsets, permissions
 
 from .filters import GameFilter
 from .models import Game, Review, Screenshot
 from .permissions import IsAuthorOrReadOnly
 from .serializers import GameSerializer, ReviewSerializer, ScreenshotSerializer
+from .utils import check_if_game_exists
 
 
 # Create your views here.
@@ -19,10 +20,7 @@ class ScreenshotViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         game_id = self.kwargs["game_pk"]
-        game = Game.objects.filter(pk=game_id).count()
-
-        if game == 0:
-            raise exceptions.NotFound()
+        check_if_game_exists(game_id)
 
         return Screenshot.objects.filter(game__id=game_id)
 
@@ -33,9 +31,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         game_id = self.kwargs["game_pk"]
-        game = Game.objects.filter(pk=game_id).count()
-
-        if game == 0:
-            raise exceptions.NotFound()
+        check_if_game_exists(game_id)
 
         return Review.objects.filter(game__id=game_id)
