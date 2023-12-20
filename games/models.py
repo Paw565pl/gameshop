@@ -1,6 +1,8 @@
 from django.core import validators
 from djongo import models
 
+from .fields import Decimal128Field
+
 
 # Create your models here.
 class Genre(models.Model):
@@ -71,7 +73,7 @@ class Game(models.Model):
     background_image = models.URLField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     description_raw = models.TextField(null=True, blank=True)
-    price = models.DecimalField(
+    price = Decimal128Field(
         max_digits=6, decimal_places=2, validators=[validators.MinValueValidator(1)]
     )
 
