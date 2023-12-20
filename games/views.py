@@ -12,7 +12,7 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Game.objects.order_by("id")
     serializer_class = GameSerializer
     filterset_class = GameFilter
-    ordering_fields = ["name", "released", "metacritic"]
+    ordering_fields = ["name", "released", "metacritic", "price"]
 
 
 class ScreenshotViewSet(viewsets.ReadOnlyModelViewSet):
