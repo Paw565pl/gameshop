@@ -68,6 +68,7 @@ class GameSerializer(serializers.ModelSerializer):
             "background_image",
             "website",
             "description_raw",
+            "price",
             "genres",
             "platforms",
             "developers",
