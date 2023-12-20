@@ -2,12 +2,14 @@ from django import forms
 from django.contrib import admin
 
 from core.mixins import ExportCsvMixin
-from .models import Game
+from .models import Game, Genre, Platform, Developer
 
 
 # Register your models here.
+@admin.register(Genre, Platform, Developer)
 class CommonAdmin(admin.ModelAdmin, ExportCsvMixin):
     actions = ["export_as_csv"]
+    search_fields = ["name__icontains", "slug__icontains"]
     list_display = ["name"]
 
 
@@ -25,5 +27,4 @@ class GameAdminForm(forms.ModelForm):
 @admin.register(Game)
 class GameAdmin(CommonAdmin):
     form = GameAdminForm
-    search_fields = ["name__icontains", "slug__icontains"]
     list_filter = ["genres", "platforms", "developers"]
