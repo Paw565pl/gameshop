@@ -16,6 +16,8 @@ pytz = "^2023.3.post1"
 django-filter = "^23.5"
 drf-nested-routers = "^0.93.5"
 tqdm = "^4.66.1"
+djoser = "^2.2.2"
+djangorestframework-simplejwt = {extras = ["crypto"], version = "^5.3.1"}
 
 
 [build-system]
