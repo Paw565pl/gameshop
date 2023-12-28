@@ -56,6 +56,18 @@ class AddItemSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     items = ItemSerializer(many=True, read_only=True)
 
+    def create(self, validated_data):
+        user = self.context["request"].user
+
+        has_cart = user.cart.count() != 0
+        if has_cart:
+            raise serializers.ValidationError("You have already created a cart.")
+
+        cart = Cart.objects.create()
+        user.cart.add(cart)
+
+        return cart
+
     class Meta:
         model = Cart
         fields = ["id", "items"]

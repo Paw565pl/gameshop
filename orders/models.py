@@ -80,18 +80,12 @@ class User(AbstractUser):
     favourites = models.ArrayReferenceField(to=Game)
 
     address = models.ArrayReferenceField(to=Address)
-    shopping_cart = models.ArrayReferenceField(to=Cart)
+    cart = models.ArrayReferenceField(to=Cart)
 
     orders = models.ArrayReferenceField(to=Order)
     support_tickets = models.ArrayReferenceField(to=SupportTicket)
 
     objects = UserManager()
-
-    def save(self, *args, **kwargs):
-        shopping_cart = Cart.objects.create()
-        self.shopping_cart.add(shopping_cart)
-
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.username
