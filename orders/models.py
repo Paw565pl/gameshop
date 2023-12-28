@@ -7,14 +7,13 @@ from core.fields import Decimal128Field
 
 from games.models import Game
 
-from .managers import CustomUserManager
+from .managers import UserManager
 
 
 # Create your models here.
 class Item(models.Model):
     game = models.ArrayReferenceField(to=Game)
     quantity = models.PositiveIntegerField(validators=[validators.MinValueValidator(1)])
-    total_price = Decimal128Field(max_digits=10, decimal_places=2)
 
     objects = models.DjongoManager()
 
@@ -45,6 +44,7 @@ class Order(models.Model):
 class SupportTicket(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     order = models.ArrayReferenceField(to=Order)
+    issued_at = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
 
     objects = models.DjongoManager()
@@ -72,7 +72,7 @@ class Address(models.Model):
     objects = models.DjongoManager()
 
 
-class CustomUser(AbstractUser):
+class User(AbstractUser):
     email = models.EmailField("email address", unique=True)
     first_name = None
     last_name = None
@@ -85,7 +85,7 @@ class CustomUser(AbstractUser):
     orders = models.ArrayReferenceField(to=Order)
     support_tickets = models.ArrayReferenceField(to=SupportTicket)
 
-    objects = CustomUserManager()
+    objects = UserManager()
 
     def save(self, *args, **kwargs):
         shopping_cart = Cart.objects.create()
