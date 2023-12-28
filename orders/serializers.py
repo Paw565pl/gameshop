@@ -55,6 +55,16 @@ class AddItemSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     items = ItemSerializer(many=True, read_only=True)
+    total_price = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_total_price(cart: Cart):
+        total_price = 0
+        cart_items = list(cart.items.all())  # noqa
+        for item in cart_items:
+            calculated_price = item.game.first().price.to_decimal() * item.quantity
+            total_price += calculated_price
+        return str(total_price)
 
     def create(self, validated_data):
         user = self.context["request"].user
@@ -70,4 +80,4 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ["id", "items"]
+        fields = ["id", "items", "total_price"]
