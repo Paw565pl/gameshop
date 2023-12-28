@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "core",
     "games",
+    "orders",
 ]
 
 MIDDLEWARE = [
@@ -135,7 +136,7 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "core.CustomUser"
+AUTH_USER_MODEL = "orders.CustomUser"
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "core.paginations.StandardResultsSetPagination",
