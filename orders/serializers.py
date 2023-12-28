@@ -1,8 +1,9 @@
 from rest_framework import serializers
+from django.db import transaction
 
 from games.models import Game
 from games.serializers import SimpleGameSerializer
-from orders.models import Cart, Item
+from orders.models import Cart, Item, Order
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -81,3 +82,35 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = ["id", "items", "total_price"]
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = ItemSerializer(many=True, read_only=True)
+    status = serializers.CharField(read_only=True)
+    placed_at = serializers.DateTimeField(read_only=True)
+    total_price = serializers.DecimalField(
+        read_only=True, max_digits=10, decimal_places=2
+    )
+
+    @transaction.atomic()
+    def create(self, validated_data):
+        user = self.context["request"].user
+
+        try:
+            cart = user.cart.first()
+        except Cart.DoesNotExist:
+            raise serializers.ValidationError("You have no cart.")
+
+        cart_items = cart.items.all()
+        total_price = CartSerializer.get_total_price(cart)
+
+        cart.delete()
+        order = Order.objects.create(total_price=total_price)
+        order.items.add(*cart_items)
+        user.orders.add(order)
+
+        return order
+
+    class Meta:
+        model = Order
+        fields = ["id", "items", "status", "placed_at", "total_price"]
