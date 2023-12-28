@@ -1,16 +1,23 @@
 from django import forms
 from django.contrib import admin
 
-from core.mixins import ExportCsvMixin
+from core.mixins import ExportJsonMixin
+
 from .models import Game, Genre, Platform, Developer
+from .serializers import (
+    GameSerializer,
+    GenreSerializer,
+    PlatformSerializer,
+    DeveloperSerializer,
+)
 
 
 # Register your models here.
-@admin.register(Genre, Platform, Developer)
-class CommonAdmin(admin.ModelAdmin, ExportCsvMixin):
-    actions = ["export_as_csv"]
-    search_fields = ["name__icontains", "slug__icontains"]
+class CommonAdmin(admin.ModelAdmin, ExportJsonMixin):
+    actions = ["export_to_json"]
     list_display = ["name"]
+    ordering = ["id"]
+    search_fields = ["name__icontains", "slug__icontains"]
 
 
 class GameAdminForm(forms.ModelForm):
@@ -26,5 +33,21 @@ class GameAdminForm(forms.ModelForm):
 
 @admin.register(Game)
 class GameAdmin(CommonAdmin):
+    serializer_class = GameSerializer
     form = GameAdminForm
     list_filter = ["genres", "platforms", "developers"]
+
+
+@admin.register(Genre)
+class GenreAdmin(CommonAdmin):
+    serializer_class = GenreSerializer
+
+
+@admin.register(Platform)
+class PlatformAdmin(CommonAdmin):
+    serializer_class = PlatformSerializer
+
+
+@admin.register(Developer)
+class DeveloperAdmin(CommonAdmin):
+    serializer_class = DeveloperSerializer
