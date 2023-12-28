@@ -1,7 +1,7 @@
 from django.core import validators
 from djongo import models
 
-from .fields import Decimal128Field
+from core.fields import Decimal128Field
 
 
 # Create your models here.
