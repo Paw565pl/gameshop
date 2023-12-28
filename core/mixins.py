@@ -1,20 +1,20 @@
-import csv
+import json
 from django.http import HttpResponse
 
 
-class ExportCsvMixin:
-    def export_as_csv(self, _, queryset):
+class ExportJsonMixin:
+    serializer_class = None
+
+    def export_to_json(self, _, queryset):
         meta = self.model._meta  # noqa
-        field_names = [field.name for field in meta.fields]
+        filename = f"{meta}.json"
 
-        response = HttpResponse(content_type="text/csv")
-        response["Content-Disposition"] = "attachment; filename={}.csv".format(meta)
-        writer = csv.writer(response)
+        serializer = self.serializer_class(queryset, many=True)
+        data = json.dumps(serializer.data, indent=2)
 
-        writer.writerow(field_names)
-        for obj in queryset:
-            writer.writerow([getattr(obj, field) for field in field_names])
+        response = HttpResponse(data, content_type="application/json")
+        response["Content-Disposition"] = "attachment; filename={}".format(filename)
 
         return response
 
-    export_as_csv.short_description = "Export selected to CSV"
+    export_to_json.short_description = "Export selected to JSON"
