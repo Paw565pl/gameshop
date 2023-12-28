@@ -83,7 +83,6 @@ class SimpleGameSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "name_original",
             "slug",
             "released",
             "background_image",
