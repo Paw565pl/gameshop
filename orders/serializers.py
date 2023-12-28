@@ -9,7 +9,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_total_price(item: Item):
-        unit_price = item.game.first().price  # FIXME
+        unit_price = item.game.first().price
         return round(unit_price * item.quantity, 2)
 
     class Meta:
@@ -20,4 +20,4 @@ class ItemSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
-        fields = ["id", "products"]
+        fields = ["id", "items"]

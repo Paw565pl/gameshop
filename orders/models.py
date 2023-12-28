@@ -19,6 +19,13 @@ class Item(models.Model):
     objects = models.DjongoManager()
 
 
+class Cart(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    items = models.ArrayReferenceField(to=Item)
+
+    objects = models.DjongoManager()
+
+
 class Order(models.Model):
     STATUS_CHOICES = [
         ("P", "Pending"),
@@ -31,13 +38,6 @@ class Order(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="P")
     placed_at = models.DateTimeField(auto_now_add=True)
     total_price = Decimal128Field(max_digits=10, decimal_places=2)
-
-    objects = models.DjongoManager()
-
-
-class Cart(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    items = models.ArrayReferenceField(to=Item)
 
     objects = models.DjongoManager()
 
