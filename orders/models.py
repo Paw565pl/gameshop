@@ -27,7 +27,7 @@ class Order(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    products = models.ArrayReferenceField(to=Item)
+    items = models.ArrayReferenceField(to=Item)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="P")
     placed_at = models.DateTimeField(auto_now_add=True)
     total_price = Decimal128Field(max_digits=10, decimal_places=2)
@@ -35,9 +35,9 @@ class Order(models.Model):
     objects = models.DjongoManager()
 
 
-class ShoppingCart(models.Model):
+class Cart(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    products = models.ArrayReferenceField(to=Item)
+    items = models.ArrayReferenceField(to=Item)
 
     objects = models.DjongoManager()
 
@@ -80,12 +80,18 @@ class CustomUser(AbstractUser):
     favourites = models.ArrayReferenceField(to=Game)
 
     address = models.ArrayReferenceField(to=Address)
-    shopping_cart = models.ArrayReferenceField(to=ShoppingCart)
+    shopping_cart = models.ArrayReferenceField(to=Cart)
 
     orders = models.ArrayReferenceField(to=Order)
     support_tickets = models.ArrayReferenceField(to=SupportTicket)
 
     objects = CustomUserManager()
+
+    def save(self, *args, **kwargs):
+        shopping_cart = Cart.objects.create()
+        self.shopping_cart.add(shopping_cart)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.username
