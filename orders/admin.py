@@ -62,7 +62,6 @@ class CartAdmin(admin.ModelAdmin):
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin, ExportJsonMixin):
     serializer_class = AddressSerializer
-    list_display = ["first_name", "last_name"]
 
 
 @admin.register(Order)
