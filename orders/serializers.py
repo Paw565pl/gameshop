@@ -53,6 +53,16 @@ class AddItemSerializer(serializers.ModelSerializer):
         except Platform.DoesNotExist:
             raise serializers.ValidationError("Invalid platform id.")
 
+        existing_item = Item.objects.filter(
+            cart__id=cart_id, game__id=game_id, platform__id=platform_id
+        )
+        if existing_item.count() != 0:
+            existing_item_instance = existing_item.get()
+            existing_item_instance.quantity += quantity
+            existing_item_instance.save()
+
+            return existing_item_instance
+
         item = Item(quantity=quantity)
         item.game.add(game)
         item.platform.add(platform)
