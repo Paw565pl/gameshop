@@ -26,50 +26,6 @@ class Cart(models.Model):
     objects = models.DjongoManager()
 
 
-class Order(models.Model):
-    ORDER_STATUS_PENDING = "PENDING"
-    ORDER_STATUS_SHIPMENT = "SHIPMENT"
-    ORDER_STATUS_COMPLETED = "COMPLETED"
-
-    ORDER_STATUS_CHOICES = [
-        (ORDER_STATUS_PENDING, "Pending"),
-        (ORDER_STATUS_SHIPMENT, "Shipment"),
-        (ORDER_STATUS_COMPLETED, "Completed"),
-    ]
-
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    items = models.ArrayReferenceField(to=Item)
-    status = models.CharField(
-        max_length=10, choices=ORDER_STATUS_CHOICES, default=ORDER_STATUS_PENDING
-    )
-    total_price = Decimal128Field(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    objects = models.DjongoManager()
-
-
-class SupportTicket(models.Model):
-    TICKET_STATUS_OPEN = "OPEN"
-    TICKET_STATUS_CLOSE = "CLOSED"
-
-    TICKET_STATUS_CHOICES = [
-        (TICKET_STATUS_OPEN, "Open"),
-        (TICKET_STATUS_CLOSE, "Closed"),
-    ]
-
-    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    status = models.CharField(
-        max_length=10, choices=TICKET_STATUS_CHOICES, default=TICKET_STATUS_OPEN
-    )
-    order = models.ArrayReferenceField(to=Order, on_delete=models.CASCADE)
-    complaint = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    objects = models.DjongoManager()
-
-
 class Address(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -98,6 +54,51 @@ class Address(models.Model):
 
     def __str__(self):
         return f"Address for {self.first_name} {self.last_name}"
+
+
+class Order(models.Model):
+    ORDER_STATUS_PENDING = "PENDING"
+    ORDER_STATUS_SHIPMENT = "SHIPMENT"
+    ORDER_STATUS_COMPLETED = "COMPLETED"
+
+    ORDER_STATUS_CHOICES = [
+        (ORDER_STATUS_PENDING, "Pending"),
+        (ORDER_STATUS_SHIPMENT, "Shipment"),
+        (ORDER_STATUS_COMPLETED, "Completed"),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    items = models.ArrayReferenceField(to=Item)
+    status = models.CharField(
+        max_length=10, choices=ORDER_STATUS_CHOICES, default=ORDER_STATUS_PENDING
+    )
+    address = models.ArrayReferenceField(to=Address)
+    total_price = Decimal128Field(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = models.DjongoManager()
+
+
+class SupportTicket(models.Model):
+    TICKET_STATUS_OPEN = "OPEN"
+    TICKET_STATUS_CLOSE = "CLOSED"
+
+    TICKET_STATUS_CHOICES = [
+        (TICKET_STATUS_OPEN, "Open"),
+        (TICKET_STATUS_CLOSE, "Closed"),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    status = models.CharField(
+        max_length=10, choices=TICKET_STATUS_CHOICES, default=TICKET_STATUS_OPEN
+    )
+    order = models.ArrayReferenceField(to=Order, on_delete=models.CASCADE)
+    complaint = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = models.DjongoManager()
 
 
 class User(AbstractUser):
