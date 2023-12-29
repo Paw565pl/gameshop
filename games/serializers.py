@@ -76,8 +76,6 @@ class GameSerializer(serializers.ModelSerializer):
 
 
 class SimpleGameSerializer(serializers.ModelSerializer):
-    platforms = PlatformSerializer(many=True)
-
     class Meta:
         model = Game
         fields = [
@@ -87,5 +85,4 @@ class SimpleGameSerializer(serializers.ModelSerializer):
             "released",
             "background_image",
             "price",
-            "platforms",
         ]
