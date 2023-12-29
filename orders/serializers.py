@@ -14,6 +14,9 @@ from orders.models import (
 
 
 class ItemSerializer(serializers.ModelSerializer):
+    game_id = serializers.IntegerField(write_only=True)
+    platform_id = serializers.IntegerField(write_only=True)
+
     game = serializers.SerializerMethodField(read_only=True)
     platform = serializers.SerializerMethodField(read_only=True)
     total_price = serializers.SerializerMethodField(read_only=True)
@@ -35,21 +38,11 @@ class ItemSerializer(serializers.ModelSerializer):
         unit_price = item.game.get().price  # noqa
         return str(unit_price.to_decimal() * item.quantity)
 
-    class Meta:
-        model = Item
-        fields = ["id", "game", "platform", "quantity", "total_price"]
-
-
-class AddItemSerializer(serializers.ModelSerializer):
-    game_id = serializers.IntegerField()
-    platform_id = serializers.IntegerField()
-
-    @transaction.atomic()
-    def save(self, **kwargs):
+    def create(self, validated_data):
         cart_id = self.context["view"].kwargs["cart_pk"]
-        game_id = self.validated_data["game_id"]
-        platform_id = self.validated_data["platform_id"]
-        quantity = self.validated_data["quantity"]
+        game_id = validated_data["game_id"]
+        platform_id = validated_data["platform_id"]
+        quantity = validated_data["quantity"]
 
         try:
             game = Game.objects.get(pk=game_id)
@@ -84,7 +77,15 @@ class AddItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ["id", "game_id", "platform_id", "quantity"]
+        fields = [
+            "id",
+            "game",
+            "platform",
+            "quantity",
+            "total_price",
+            "game_id",
+            "platform_id",
+        ]
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -129,6 +130,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
         address = Address.objects.create(**validated_data)
         user.address.add(address)
+
         return address
 
     class Meta:
@@ -202,11 +204,12 @@ class SupportTicketMessageSerializer(serializers.ModelSerializer):
 
 
 class SupportTicketSerializer(serializers.ModelSerializer):
-    status = serializers.CharField(read_only=True)
     order_id = serializers.CharField(write_only=True)
+    complaint = serializers.CharField(write_only=True)
+
+    status = serializers.CharField(read_only=True)
     order = serializers.SerializerMethodField(read_only=True)
     messages = SupportTicketMessageSerializer(many=True, read_only=True)
-    complaint = serializers.CharField(write_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
 
@@ -254,10 +257,10 @@ class SupportTicketSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "status",
-            "order_id",
             "order",
             "messages",
-            "complaint",
             "created_at",
             "updated_at",
+            "order_id",
+            "complaint",
         ]

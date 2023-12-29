@@ -3,7 +3,6 @@ from orders.models import Cart, Item, Order, Address, SupportTicket
 from orders.serializers import (
     CartSerializer,
     ItemSerializer,
-    AddItemSerializer,
     OrderSerializer,
     AddressSerializer,
     SupportTicketSerializer,
@@ -37,11 +36,6 @@ class CartItemViewSet(viewsets.ModelViewSet):
         return Item.objects.filter(cart__id=cart_id, cart__user__id=user_id).order_by(
             "id"
         )
-
-    def get_serializer_class(self):
-        if self.action == "create":
-            return AddItemSerializer
-        return ItemSerializer
 
 
 class OrderViewSet(
