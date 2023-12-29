@@ -61,10 +61,9 @@ class CartAdmin(admin.ModelAdmin):
         links = []
         items = obj.items.all()
         for item in items:
+            inner_text = f"{item.game.get().name} ({item.platform.get().name})"
             url = reverse("admin:orders_item_change", args=[item.id])
-            links.append(
-                '<a href="{}">{}</a><br/><br/>'.format(url, item.game.get().name)
-            )
+            links.append('<a href="{}">{}</a><br/><br/>'.format(url, inner_text))
         return mark_safe("".join(links))
 
 
@@ -114,10 +113,9 @@ class OrderAdmin(admin.ModelAdmin, ExportJsonMixin):
         links = []
         items = obj.items.all()
         for item in items:
+            inner_text = f"{item.game.get().name} ({item.platform.get().name})"
             url = reverse("admin:orders_item_change", args=[item.id])
-            links.append(
-                '<a href="{}">{}</a><br/><br/>'.format(url, item.game.get().name)
-            )
+            links.append('<a href="{}">{}</a><br/><br/>'.format(url, inner_text))
         return mark_safe("".join(links))
 
     @staticmethod
