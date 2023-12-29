@@ -168,6 +168,7 @@ class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin, ExportJsonMixin):
     serializer_class = UserSerializer
+    actions = ["export_to_json"]
     list_display = ["username"]
     list_filter = ["is_active", "is_staff", "is_superuser", "date_joined"]
     search_fields = ["username__icontains"]
