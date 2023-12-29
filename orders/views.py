@@ -30,7 +30,10 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         cart_id = self.kwargs["cart_pk"]
-        return Item.objects.filter(cart__id=cart_id).order_by("id")
+        user_id = self.request.user.id
+        return Item.objects.filter(cart__id=cart_id, cart__user__id=user_id).order_by(
+            "id"
+        )
 
     def get_serializer_class(self):
         if self.action == "create":
