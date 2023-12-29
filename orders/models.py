@@ -94,7 +94,12 @@ class SupportTicket(models.Model):
         max_length=10, choices=TICKET_STATUS_CHOICES, default=TICKET_STATUS_OPEN
     )
     order = models.ArrayReferenceField(to=Order, on_delete=models.CASCADE)
-    complaint = models.TextField()
+    complaint = models.TextField(
+        validators=[
+            validators.MinLengthValidator(10),
+            validators.MaxLengthValidator(1000),
+        ]
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
