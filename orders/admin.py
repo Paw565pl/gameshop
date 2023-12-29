@@ -8,11 +8,6 @@ from .serializers import OrderSerializer, SupportTicketSerializer, AddressSerial
 
 
 # Register your models here.
-@admin.register(Cart)
-class SimpleAdmin(admin.ModelAdmin):
-    list_display = ["id"]
-
-
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     list_display = ["id"]
@@ -37,6 +32,31 @@ class ItemAdmin(admin.ModelAdmin):
         platform = obj.platform.get()
         url = reverse("admin:games_platform_change", args=[platform.id])
         return mark_safe('<a href="{}">{}</a>'.format(url, platform.name))
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ["id"]
+    readonly_fields = ["items_links"]
+    fieldsets = [
+        (
+            "General",
+            {
+                "fields": ["items_links"],
+            },
+        ),
+    ]
+
+    @staticmethod
+    def items_links(obj):
+        links = []
+        items = obj.items.all()
+        for item in items:
+            url = reverse("admin:orders_item_change", args=[item.id])
+            links.append(
+                '<a href="{}">{}</a><br/><br/>'.format(url, item.game.get().name)
+            )
+        return mark_safe("".join(links))
 
 
 @admin.register(Address)
