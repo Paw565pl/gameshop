@@ -68,9 +68,9 @@ class AddressAdmin(admin.ModelAdmin, ExportJsonMixin):
 class OrderAdmin(admin.ModelAdmin, ExportJsonMixin):
     serializer_class = OrderSerializer
     list_display = ["id", "status"]
-    list_filter = ["status", "created_at"]
+    list_filter = ["status", "created_at", "updated_at"]
+    ordering = ["-created_at"]
     readonly_fields = [
-        "id",
         "created_at",
         "updated_at",
         "total_price",
@@ -79,10 +79,9 @@ class OrderAdmin(admin.ModelAdmin, ExportJsonMixin):
     ]
     fieldsets = (
         (
-            "General Information",
+            "General",
             {
                 "fields": (
-                    "id",
                     "total_price",
                     "status",
                     "items",
