@@ -12,13 +12,13 @@ class ItemSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_game(item: Item):
-        game = item.game.first()  # noqa
+        game = item.game.get()  # noqa
         serialized_game = SimpleGameSerializer(game).data
         return serialized_game
 
     @staticmethod
     def get_total_price(item: Item):
-        unit_price = item.game.first().price  # noqa
+        unit_price = item.game.get().price  # noqa
         return str(unit_price.to_decimal() * item.quantity)
 
     class Meta:
@@ -63,7 +63,7 @@ class CartSerializer(serializers.ModelSerializer):
         total_price = 0
         cart_items = list(cart.items.all())  # noqa
         for item in cart_items:
-            calculated_price = item.game.first().price.to_decimal() * item.quantity
+            calculated_price = item.game.get().price.to_decimal() * item.quantity
             total_price += calculated_price
         return str(total_price)
 
@@ -95,11 +95,15 @@ class OrderSerializer(serializers.ModelSerializer):
     @transaction.atomic()
     def create(self, validated_data):
         user = self.context["request"].user
+        user_id = user.id
 
         try:
-            cart = user.cart.first()
+            cart = user.cart.get(user__id=user_id)
         except Cart.DoesNotExist:
             raise serializers.ValidationError("You have no cart.")
+
+        if cart.items.count() == 0:
+            raise serializers.ValidationError("Your cart is empty.")
 
         cart_items = cart.items.all()
         total_price = CartSerializer.get_total_price(cart)
