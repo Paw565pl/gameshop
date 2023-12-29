@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import serializers
 
 from .models import Game, Genre, Platform, Developer, Screenshot, Review
@@ -34,6 +35,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = "__all__"
 
+    @transaction.atomic()
     def create(self, validated_data):
         username = self.context["request"].user.username
         game_id = self.context["view"].kwargs["game_pk"]
@@ -47,7 +49,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
         new_review = Review.objects.create(author=username, **validated_data)
         game.reviews.add(new_review)
-        game.save()
+
         return new_review
 
 
