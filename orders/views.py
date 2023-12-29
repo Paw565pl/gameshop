@@ -49,8 +49,8 @@ class OrderViewSet(
 ):
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
-    ordering_fields = ["placed_at"]
-    ordering = ["-placed_at"]
+    ordering_fields = ["created_at"]
+    ordering = ["-created_at"]
 
     def get_queryset(self):
         user_id = self.request.user.id

@@ -1,13 +1,14 @@
 from rest_framework import serializers
 from django.db import transaction
 
-from games.models import Game
-from games.serializers import SimpleGameSerializer
+from games.models import Game, Platform
+from games.serializers import SimpleGameSerializer, PlatformSerializer
 from orders.models import Cart, Item, Order
 
 
 class ItemSerializer(serializers.ModelSerializer):
     game = serializers.SerializerMethodField(read_only=True)
+    platform = serializers.SerializerMethodField(read_only=True)
     total_price = serializers.SerializerMethodField(read_only=True)
 
     @staticmethod
@@ -17,21 +18,29 @@ class ItemSerializer(serializers.ModelSerializer):
         return serialized_game
 
     @staticmethod
+    def get_platform(item: Item):
+        platform = item.platform.get()  # noqa
+        serialized_platform = PlatformSerializer(platform).data
+        return serialized_platform
+
+    @staticmethod
     def get_total_price(item: Item):
         unit_price = item.game.get().price  # noqa
         return str(unit_price.to_decimal() * item.quantity)
 
     class Meta:
         model = Item
-        fields = ["id", "game", "quantity", "total_price"]
+        fields = ["id", "game", "platform", "quantity", "total_price"]
 
 
 class AddItemSerializer(serializers.ModelSerializer):
     game_id = serializers.IntegerField()
+    platform_id = serializers.IntegerField()
 
     def save(self, **kwargs):
         cart_id = self.context["view"].kwargs["cart_pk"]
         game_id = self.validated_data["game_id"]
+        platform_id = self.validated_data["platform_id"]
         quantity = self.validated_data["quantity"]
 
         try:
@@ -39,8 +48,14 @@ class AddItemSerializer(serializers.ModelSerializer):
         except Game.DoesNotExist:
             raise serializers.ValidationError("Invalid game id.")
 
+        try:
+            platform = game.platforms.get(pk=platform_id)
+        except Platform.DoesNotExist:
+            raise serializers.ValidationError("Invalid platform id.")
+
         item = Item(quantity=quantity)
         item.game.add(game)
+        item.platform.add(platform)
         item.save()
 
         cart = Cart.objects.get(id=cart_id)
@@ -51,7 +66,7 @@ class AddItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ["id", "game_id", "quantity"]
+        fields = ["id", "game_id", "platform_id", "quantity"]
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -87,7 +102,8 @@ class CartSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     items = ItemSerializer(many=True, read_only=True)
     status = serializers.CharField(read_only=True)
-    placed_at = serializers.DateTimeField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
     total_price = serializers.DecimalField(
         read_only=True, max_digits=10, decimal_places=2
     )
@@ -117,4 +133,4 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["id", "items", "status", "placed_at", "total_price"]
+        fields = ["id", "items", "status", "created_at", "updated_at", "total_price"]
