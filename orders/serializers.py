@@ -3,7 +3,7 @@ from django.db import transaction
 
 from games.models import Game, Platform
 from games.serializers import SimpleGameSerializer, PlatformSerializer
-from orders.models import Cart, Item, Order
+from orders.models import Cart, Item, Order, Address
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -144,3 +144,24 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ["id", "items", "status", "created_at", "updated_at", "total_price"]
+
+
+# class SupportTicketSerializer(serializers.ModelSerializer):
+#     pass
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        user = self.context["request"].user
+
+        has_address = user.address.count() != 0
+        if has_address:
+            raise serializers.ValidationError("You have already created an address.")
+
+        address = Address.objects.create(**validated_data)
+        user.address.add(address)
+        return address
+
+    class Meta:
+        model = Address
+        fields = "__all__"
