@@ -12,6 +12,7 @@ from orders.serializers import (
 # Create your views here.
 class CartViewSet(
     viewsets.GenericViewSet,
+    mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
@@ -57,10 +58,6 @@ class OrderViewSet(
         user_id = self.request.user.id
         orders = Order.objects.filter(user__id=user_id).order_by("id")
         return orders
-
-
-# class SupportTicketViewSet(viewsets.ModelViewSet):
-#     pass
 
 
 class AddressViewSet(viewsets.ModelViewSet):
