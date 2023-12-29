@@ -1,9 +1,18 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from djoser.serializers import UserSerializer
 
 from core.mixins import ExportJsonMixin
-from .models import Order, SupportTicket, SupportTicketMessage, Item, Cart, Address
+from .models import (
+    Order,
+    SupportTicket,
+    SupportTicketMessage,
+    Item,
+    Cart,
+    Address,
+    User,
+)
 from .serializers import OrderSerializer, SupportTicketSerializer, AddressSerializer
 
 
@@ -61,14 +70,14 @@ class CartAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin, ExportJsonMixin):
-    actions = ["export_to_json"]
     serializer_class = AddressSerializer
+    actions = ["export_to_json"]
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin, ExportJsonMixin):
-    actions = ["export_to_json"]
     serializer_class = OrderSerializer
+    actions = ["export_to_json"]
     list_display = ["id", "status"]
     list_filter = ["status", "created_at", "updated_at"]
     ordering = ["-created_at"]
@@ -128,8 +137,8 @@ class SupportTicketMessageAdmin(admin.ModelAdmin):
 
 @admin.register(SupportTicket)
 class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
-    actions = ["export_to_json"]
     serializer_class = SupportTicketSerializer
+    actions = ["export_to_json"]
     list_display = ["id", "status", "created_at", "updated_at"]
     list_filter = ["status", "created_at"]
     readonly_fields = ["created_at", "updated_at", "order_link", "messages_links"]
@@ -155,4 +164,55 @@ class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
         for message in messages:
             url = reverse("admin:orders_supportticketmessage_change", args=[message.id])
             links.append('<a href="{}">{}</a><br/><br/>'.format(url, message.message))
+        return mark_safe("".join(links))
+
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin, ExportJsonMixin):
+    serializer_class = UserSerializer
+    list_display = ["username"]
+    list_filter = ["is_active", "is_staff", "is_superuser", "date_joined"]
+    search_fields = ["username__icontains"]
+    autocomplete_fields = ["favourites"]
+    readonly_fields = [
+        "address_link",
+        "cart_link",
+        "orders_links",
+        "support_tickets_links",
+    ]
+
+    @staticmethod
+    def address_link(obj):
+        address_id = obj.address.get().id
+        url = reverse("admin:orders_address_change", args=[address_id])
+        return mark_safe('<a href="{}">{}</a>'.format(url, "Address"))
+
+    @staticmethod
+    def cart_link(obj):
+        cart_id = obj.cart.get().id
+        url = reverse("admin:orders_cart_change", args=[cart_id])
+        return mark_safe('<a href="{}">{}</a>'.format(url, "Cart"))
+
+    @staticmethod
+    def orders_links(obj):
+        links = []
+        orders = obj.orders.all()
+        for order in orders:
+            url = reverse("admin:orders_order_change", args=[order.id])
+            links.append(
+                '<a href="{}">{}</a><br/><br/>'.format(url, f"Order {order.id}")
+            )
+        return mark_safe("".join(links))
+
+    @staticmethod
+    def support_tickets_links(obj):
+        links = []
+        support_tickets = obj.support_tickets.all()
+        for support_ticket in support_tickets:
+            url = reverse("admin:orders_supportticket_change", args=[support_ticket.id])
+            links.append(
+                '<a href="{}">{}</a><br/><br/>'.format(
+                    url, f"Support Ticket {support_ticket.id}"
+                )
+            )
         return mark_safe("".join(links))
