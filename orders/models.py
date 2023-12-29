@@ -73,8 +73,11 @@ class SupportTicket(models.Model):
 class Address(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    phone_number = models.IntegerField(
-        validators=[validators.RegexValidator("^[0-9]{9}$", "Invalid phone number")]
+    phone_number = models.CharField(
+        max_length=9,
+        validators=[
+            validators.RegexValidator("^[0-9]{9}$", "Phone number must be 9 digits.")
+        ],
     )
     street = models.CharField(max_length=255)
     street_number = models.CharField(max_length=255)
@@ -83,13 +86,18 @@ class Address(models.Model):
     post_code = models.CharField(
         max_length=6,
         validators=[
-            validators.RegexValidator("^[0-9]{2}-[0-9]{3}$", "Invalid post code")
+            validators.RegexValidator(
+                "^[0-9]{2}-[0-9]{3}$", "Invalid post code. Correct format is XX-XXX."
+            )
         ],
     )
     state = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
 
     objects = models.DjongoManager()
+
+    def __str__(self):
+        return f"Address for {self.first_name} {self.last_name}"
 
 
 class User(AbstractUser):
