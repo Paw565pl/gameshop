@@ -30,9 +30,12 @@ class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
     serializer_class = SupportTicketSerializer
     list_display = ["id", "status", "created_at", "updated_at"]
     list_filter = ["status", "created_at"]
-    readonly_fields = ["id", "created_at", "updated_at", "order_link"]
+    readonly_fields = ["id", "created_at", "updated_at", "order_link", "messages_links"]
     fieldsets = (
-        ("General Information", {"fields": ("id", "order_link", "status", "messages")}),
+        (
+            "General Information",
+            {"fields": ("id", "order_link", "status", "messages", "messages_links")},
+        ),
         ("Timestamps", {"fields": ("created_at", "updated_at")}),
     )
 
@@ -42,7 +45,14 @@ class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
         url = reverse("admin:orders_order_change", args=[order_id])
         return mark_safe('<a href="{}">{}</a>'.format(url, "Order"))
 
-    order_link.short_description = "Order"
+    @staticmethod
+    def messages_links(obj):
+        links = []
+        messages = obj.messages.all()
+        for message in messages:
+            url = reverse("admin:orders_supportticket_change", args=[message.id])
+            links.append('<a href="{}">{}</a><br/><br/>'.format(url, message.message))
+        return mark_safe("".join(links))
 
 
 admin.site.register(SupportTicketMessage)
