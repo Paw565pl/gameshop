@@ -61,11 +61,13 @@ class CartAdmin(admin.ModelAdmin):
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin, ExportJsonMixin):
+    actions = ["export_to_json"]
     serializer_class = AddressSerializer
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin, ExportJsonMixin):
+    actions = ["export_to_json"]
     serializer_class = OrderSerializer
     list_display = ["id", "status"]
     list_filter = ["status", "created_at", "updated_at"]
@@ -126,6 +128,7 @@ class SupportTicketMessageAdmin(admin.ModelAdmin):
 
 @admin.register(SupportTicket)
 class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
+    actions = ["export_to_json"]
     serializer_class = SupportTicketSerializer
     list_display = ["id", "status", "created_at", "updated_at"]
     list_filter = ["status", "created_at"]
