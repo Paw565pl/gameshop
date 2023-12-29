@@ -3,7 +3,14 @@ from django.db import transaction
 
 from games.models import Game, Platform
 from games.serializers import SimpleGameSerializer, PlatformSerializer
-from orders.models import Cart, Item, Order, Address, SupportTicket
+from orders.models import (
+    Cart,
+    Item,
+    Order,
+    Address,
+    SupportTicket,
+    SupportTicketMessage,
+)
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -188,16 +195,31 @@ class OrderSerializer(serializers.ModelSerializer):
         ]
 
 
-class CreateSupportTicketSerializer(serializers.ModelSerializer):
+class SupportTicketMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SupportTicketMessage
+        fields = "__all__"
+
+
+class SupportTicketSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
-    order_id = serializers.CharField()
-    complaint = serializers.CharField()
+    order_id = serializers.CharField(write_only=True)
+    order = serializers.SerializerMethodField(read_only=True)
+    messages = SupportTicketMessageSerializer(many=True, read_only=True)
+    complaint = serializers.CharField(write_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
+
+    @staticmethod
+    def get_order(support_ticket: SupportTicket):
+        order = support_ticket.order.get()  # noqa
+        serialized_order = OrderSerializer(order).data
+        return serialized_order
 
     @transaction.atomic()
     def create(self, validated_data):
         user = self.context["request"].user
+        username = user.username
         order_id = validated_data["order_id"]
         complaint = validated_data["complaint"]
 
@@ -214,28 +236,28 @@ class CreateSupportTicketSerializer(serializers.ModelSerializer):
                 "You have already created a support ticket for this order."
             )
 
-        support_ticket = SupportTicket(complaint=complaint)
+        support_ticket_message = SupportTicketMessage()
+        support_ticket_message.author = username
+        support_ticket_message.message = complaint
+        support_ticket_message.save()
 
+        support_ticket = SupportTicket.objects.create()
+
+        support_ticket.messages.add(support_ticket_message)
         support_ticket.order.add(order)
         user.support_tickets.add(support_ticket)
 
-        support_ticket.save()
         return support_ticket
 
     class Meta:
         model = SupportTicket
-        fields = ["id", "status", "order_id", "complaint", "created_at", "updated_at"]
-
-
-class SupportTicketSerializer(serializers.ModelSerializer):
-    order = serializers.SerializerMethodField(read_only=True)
-
-    @staticmethod
-    def get_order(support_ticket: SupportTicket):
-        order = support_ticket.order.get()  # noqa
-        serialized_order = OrderSerializer(order).data
-        return serialized_order
-
-    class Meta:
-        model = SupportTicket
-        fields = ["id", "status", "order", "complaint", "created_at", "updated_at"]
+        fields = [
+            "id",
+            "status",
+            "order_id",
+            "order",
+            "messages",
+            "complaint",
+            "created_at",
+            "updated_at",
+        ]

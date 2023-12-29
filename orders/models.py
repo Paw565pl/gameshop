@@ -3,10 +3,9 @@ from uuid import uuid4
 from django.contrib.auth.models import AbstractUser
 from djongo import models
 from django.core import validators
+
 from core.fields import Decimal128Field
-
 from games.models import Game, Platform
-
 from .managers import UserManager
 
 
@@ -80,6 +79,19 @@ class Order(models.Model):
     objects = models.DjongoManager()
 
 
+class SupportTicketMessage(models.Model):
+    author = models.CharField(max_length=255)
+    message = models.TextField(
+        validators=[
+            validators.MinLengthValidator(10),
+            validators.MaxLengthValidator(1000),
+        ]
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = models.DjongoManager()
+
+
 class SupportTicket(models.Model):
     TICKET_STATUS_OPEN = "OPEN"
     TICKET_STATUS_CLOSE = "CLOSED"
@@ -94,12 +106,7 @@ class SupportTicket(models.Model):
         max_length=10, choices=TICKET_STATUS_CHOICES, default=TICKET_STATUS_OPEN
     )
     order = models.ArrayReferenceField(to=Order, on_delete=models.CASCADE)
-    complaint = models.TextField(
-        validators=[
-            validators.MinLengthValidator(10),
-            validators.MaxLengthValidator(1000),
-        ]
-    )
+    messages = models.ArrayReferenceField(to=SupportTicketMessage)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
