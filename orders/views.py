@@ -7,7 +7,6 @@ from orders.serializers import (
     OrderSerializer,
     AddressSerializer,
     SupportTicketSerializer,
-    CreateSupportTicketSerializer,
 )
 
 
@@ -79,14 +78,10 @@ class SupportTicketViewSet(
     mixins.RetrieveModelMixin,
     mixins.DestroyModelMixin,
 ):
+    serializer_class = SupportTicketSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user_id = self.request.user.id
         support_tickets = SupportTicket.objects.filter(user__id=user_id).order_by("id")
         return support_tickets
-
-    def get_serializer_class(self):
-        if self.action == "create":
-            return CreateSupportTicketSerializer
-        return SupportTicketSerializer
