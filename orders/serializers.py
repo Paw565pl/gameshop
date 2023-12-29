@@ -109,47 +109,6 @@ class CartSerializer(serializers.ModelSerializer):
         fields = ["id", "items", "total_price"]
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    items = ItemSerializer(many=True, read_only=True)
-    status = serializers.CharField(read_only=True)
-    created_at = serializers.DateTimeField(read_only=True)
-    updated_at = serializers.DateTimeField(read_only=True)
-    total_price = serializers.DecimalField(
-        read_only=True, max_digits=10, decimal_places=2
-    )
-
-    @transaction.atomic()
-    def create(self, validated_data):
-        user = self.context["request"].user
-        user_id = user.id
-
-        try:
-            cart = user.cart.get(user__id=user_id)
-        except Cart.DoesNotExist:
-            raise serializers.ValidationError("You have no cart.")
-
-        if cart.items.count() == 0:
-            raise serializers.ValidationError("Your cart is empty.")
-
-        cart_items = cart.items.all()
-        total_price = CartSerializer.get_total_price(cart)
-
-        cart.delete()
-        order = Order.objects.create(total_price=total_price)
-        order.items.add(*cart_items)
-        user.orders.add(order)
-
-        return order
-
-    class Meta:
-        model = Order
-        fields = ["id", "items", "status", "created_at", "updated_at", "total_price"]
-
-
-# class SupportTicketSerializer(serializers.ModelSerializer):
-#     pass
-
-
 class AddressSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context["request"].user
@@ -165,3 +124,61 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = "__all__"
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    items = ItemSerializer(many=True, read_only=True)
+    status = serializers.CharField(read_only=True)
+    address = serializers.SerializerMethodField(read_only=True)
+    total_price = serializers.DecimalField(
+        read_only=True, max_digits=10, decimal_places=2
+    )
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
+
+    @staticmethod
+    def get_address(order: Order):
+        address = order.address.get()  # noqa
+        serialized_address = AddressSerializer(address).data
+        return serialized_address
+
+    @transaction.atomic()
+    def create(self, validated_data):
+        user = self.context["request"].user
+        user_id = user.id
+
+        try:
+            cart = user.cart.get(user__id=user_id)
+        except Cart.DoesNotExist:
+            raise serializers.ValidationError("You have no cart.")
+
+        if cart.items.count() == 0:
+            raise serializers.ValidationError("Your cart is empty.")
+
+        try:
+            address = user.address.get(user__id=user_id)
+        except Address.DoesNotExist:
+            raise serializers.ValidationError("You have no address.")
+
+        cart_items = cart.items.all()
+        total_price = CartSerializer.get_total_price(cart)
+
+        cart.delete()
+        order = Order.objects.create(total_price=total_price)
+        order.items.add(*cart_items)
+        order.address.add(address)
+        user.orders.add(order)
+
+        return order
+
+    class Meta:
+        model = Order
+        fields = [
+            "id",
+            "items",
+            "status",
+            "address",
+            "total_price",
+            "created_at",
+            "updated_at",
+        ]
