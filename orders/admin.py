@@ -55,4 +55,9 @@ class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
         return mark_safe("".join(links))
 
 
-admin.site.register(SupportTicketMessage)
+@admin.register(SupportTicketMessage)
+class SupportTicketMessageAdmin(admin.ModelAdmin):
+    list_display = ["id", "author", "created_at"]
+    list_filter = ["created_at"]
+    search_fields = ["author__icontains"]
+    ordering = ["-created_at"]
