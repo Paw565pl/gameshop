@@ -1,11 +1,13 @@
 from rest_framework import viewsets, permissions, mixins
-from orders.models import Cart, Item, Order, Address
+from orders.models import Cart, Item, Order, Address, SupportTicket
 from orders.serializers import (
     CartSerializer,
     ItemSerializer,
     AddItemSerializer,
     OrderSerializer,
     AddressSerializer,
+    SupportTicketSerializer,
+    CreateSupportTicketSerializer,
 )
 
 
@@ -68,3 +70,23 @@ class AddressViewSet(viewsets.ModelViewSet):
         user_id = self.request.user.id
         address = Address.objects.filter(user__id=user_id).order_by("id")
         return address
+
+
+class SupportTicketViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
+):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        support_tickets = SupportTicket.objects.filter(user__id=user_id).order_by("id")
+        return support_tickets
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return CreateSupportTicketSerializer
+        return SupportTicketSerializer

@@ -3,7 +3,7 @@ from django.db import transaction
 
 from games.models import Game, Platform
 from games.serializers import SimpleGameSerializer, PlatformSerializer
-from orders.models import Cart, Item, Order, Address
+from orders.models import Cart, Item, Order, Address, SupportTicket
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -37,6 +37,7 @@ class AddItemSerializer(serializers.ModelSerializer):
     game_id = serializers.IntegerField()
     platform_id = serializers.IntegerField()
 
+    @transaction.atomic()
     def save(self, **kwargs):
         cart_id = self.context["view"].kwargs["cart_pk"]
         game_id = self.validated_data["game_id"]
@@ -92,6 +93,7 @@ class CartSerializer(serializers.ModelSerializer):
             total_price += calculated_price
         return str(total_price)
 
+    @transaction.atomic()
     def create(self, validated_data):
         user = self.context["request"].user
 
@@ -110,6 +112,7 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class AddressSerializer(serializers.ModelSerializer):
+    @transaction.atomic()
     def create(self, validated_data):
         user = self.context["request"].user
 
@@ -165,6 +168,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         cart.delete()
         order = Order.objects.create(total_price=total_price)
+
         order.items.add(*cart_items)
         order.address.add(address)
         user.orders.add(order)
@@ -182,3 +186,56 @@ class OrderSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+
+class CreateSupportTicketSerializer(serializers.ModelSerializer):
+    status = serializers.CharField(read_only=True)
+    order_id = serializers.CharField()
+    complaint = serializers.CharField()
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
+
+    @transaction.atomic()
+    def create(self, validated_data):
+        user = self.context["request"].user
+        order_id = validated_data["order_id"]
+        complaint = validated_data["complaint"]
+
+        try:
+            order = Order.objects.get(pk=order_id)
+        except Order.DoesNotExist:
+            raise serializers.ValidationError("Invalid order id.")
+
+        has_support_ticket_for_order = (
+            SupportTicket.objects.filter(order__id=order_id).count() != 0
+        )
+        if has_support_ticket_for_order:
+            raise serializers.ValidationError(
+                "You have already created a support ticket for this order."
+            )
+
+        support_ticket = SupportTicket(complaint=complaint)
+
+        support_ticket.order.add(order)
+        user.support_tickets.add(support_ticket)
+
+        support_ticket.save()
+        return support_ticket
+
+    class Meta:
+        model = SupportTicket
+        fields = ["id", "status", "order_id", "complaint", "created_at", "updated_at"]
+
+
+class SupportTicketSerializer(serializers.ModelSerializer):
+    order = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_order(support_ticket: SupportTicket):
+        order = support_ticket.order.get()  # noqa
+        serialized_order = OrderSerializer(order).data
+        return serialized_order
+
+    class Meta:
+        model = SupportTicket
+        fields = ["id", "status", "order", "complaint", "created_at", "updated_at"]
