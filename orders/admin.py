@@ -3,19 +3,49 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from core.mixins import ExportJsonMixin
-from .models import Order, SupportTicket, SupportTicketMessage
-from .serializers import OrderSerializer, SupportTicketSerializer
+from .models import Order, SupportTicket, SupportTicketMessage, Item, Cart, Address
+from .serializers import OrderSerializer, SupportTicketSerializer, AddressSerializer
 
 
 # Register your models here.
+@admin.register(Item, Cart)
+class SimpleAdmin(admin.ModelAdmin):
+    list_display = ["id"]
+
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin, ExportJsonMixin):
+    serializer_class = AddressSerializer
+    list_display = ["first_name", "last_name"]
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin, ExportJsonMixin):
     serializer_class = OrderSerializer
-    list_display = ["id", "status", "total_price", "created_at", "updated_at"]
+    list_display = ["id", "status"]
     list_filter = ["status", "created_at"]
-    readonly_fields = ["id", "created_at", "updated_at"]
+    readonly_fields = [
+        "id",
+        "created_at",
+        "updated_at",
+        "total_price",
+        "items_links",
+        "address_link",
+    ]
     fieldsets = (
-        ("General Information", {"fields": ("id", "status", "total_price")}),
+        (
+            "General Information",
+            {
+                "fields": (
+                    "id",
+                    "total_price",
+                    "status",
+                    "items",
+                    "items_links",
+                    "address_link",
+                )
+            },
+        ),
         (
             "Timestamps",
             {
@@ -23,6 +53,31 @@ class OrderAdmin(admin.ModelAdmin, ExportJsonMixin):
             },
         ),
     )
+
+    @staticmethod
+    def items_links(obj):
+        links = []
+        items = obj.items.all()
+        for item in items:
+            url = reverse("admin:orders_item_change", args=[item.id])
+            links.append(
+                '<a href="{}">{}</a><br/><br/>'.format(url, item.game.get().name)
+            )
+        return mark_safe("".join(links))
+
+    @staticmethod
+    def address_link(obj):
+        address_id = obj.address.get().id
+        url = reverse("admin:orders_address_change", args=[address_id])
+        return mark_safe('<a href="{}">{}</a>'.format(url, "Address"))
+
+
+@admin.register(SupportTicketMessage)
+class SupportTicketMessageAdmin(admin.ModelAdmin):
+    list_display = ["id", "author", "created_at"]
+    list_filter = ["created_at"]
+    search_fields = ["author__icontains"]
+    ordering = ["-created_at"]
 
 
 @admin.register(SupportTicket)
@@ -53,11 +108,3 @@ class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
             url = reverse("admin:orders_supportticketmessage_change", args=[message.id])
             links.append('<a href="{}">{}</a><br/><br/>'.format(url, message.message))
         return mark_safe("".join(links))
-
-
-@admin.register(SupportTicketMessage)
-class SupportTicketMessageAdmin(admin.ModelAdmin):
-    list_display = ["id", "author", "created_at"]
-    list_filter = ["created_at"]
-    search_fields = ["author__icontains"]
-    ordering = ["-created_at"]
