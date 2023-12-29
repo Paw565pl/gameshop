@@ -5,7 +5,7 @@ from djongo import models
 from django.core import validators
 from core.fields import Decimal128Field
 
-from games.models import Game
+from games.models import Game, Platform
 
 from .managers import UserManager
 
@@ -13,6 +13,7 @@ from .managers import UserManager
 # Create your models here.
 class Item(models.Model):
     game = models.ArrayReferenceField(to=Game)
+    platform = models.ArrayReferenceField(to=Platform)
     quantity = models.PositiveIntegerField(validators=[validators.MinValueValidator(1)])
 
     objects = models.DjongoManager()
@@ -26,26 +27,45 @@ class Cart(models.Model):
 
 
 class Order(models.Model):
-    STATUS_CHOICES = [
-        ("P", "Pending"),
-        ("S", "In Shipment"),
-        ("C", "Completed"),
+    ORDER_STATUS_PENDING = "PENDING"
+    ORDER_STATUS_SHIPMENT = "SHIPMENT"
+    ORDER_STATUS_COMPLETED = "COMPLETED"
+
+    ORDER_STATUS_CHOICES = [
+        (ORDER_STATUS_PENDING, "Pending"),
+        (ORDER_STATUS_SHIPMENT, "Shipment"),
+        (ORDER_STATUS_COMPLETED, "Completed"),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     items = models.ArrayReferenceField(to=Item)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="P")
-    placed_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(
+        max_length=10, choices=ORDER_STATUS_CHOICES, default=ORDER_STATUS_PENDING
+    )
     total_price = Decimal128Field(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.DjongoManager()
 
 
 class SupportTicket(models.Model):
+    TICKET_STATUS_OPEN = "OPEN"
+    TICKET_STATUS_CLOSE = "CLOSED"
+
+    TICKET_STATUS_CHOICES = [
+        (TICKET_STATUS_OPEN, "Open"),
+        (TICKET_STATUS_CLOSE, "Closed"),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    order = models.ArrayReferenceField(to=Order)
-    issued_at = models.DateTimeField(auto_now_add=True)
-    content = models.TextField()
+    status = models.CharField(
+        max_length=10, choices=TICKET_STATUS_CHOICES, default=TICKET_STATUS_OPEN
+    )
+    order = models.ArrayReferenceField(to=Order, on_delete=models.CASCADE)
+    complaint = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = models.DjongoManager()
 
