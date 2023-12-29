@@ -1,8 +1,8 @@
 from uuid import uuid4
 
 from django.contrib.auth.models import AbstractUser
-from djongo import models
 from django.core import validators
+from djongo import models
 
 from core.fields import Decimal128Field
 from games.models import Game, Platform

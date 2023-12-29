@@ -1,7 +1,7 @@
+from django.conf import settings
 from djongo import database
 from pymongo import MongoClient
 from pymongo.database import Database, Collection
-from django.conf import settings
 
 
 def get_mongo_collection(collection_name: str) -> Collection | None:

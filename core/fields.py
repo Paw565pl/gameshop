@@ -1,5 +1,5 @@
-from djongo import models
 from bson import Decimal128
+from djongo import models
 
 
 class Decimal128Field(models.DecimalField):

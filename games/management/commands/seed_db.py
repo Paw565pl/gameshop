@@ -1,4 +1,5 @@
 import json
+
 from django.core.management.base import BaseCommand, CommandError
 from tqdm import tqdm
 

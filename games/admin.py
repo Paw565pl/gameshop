@@ -2,7 +2,6 @@ from django import forms
 from django.contrib import admin
 
 from core.mixins import ExportJsonMixin
-
 from .models import Game, Genre, Platform, Developer
 from .serializers import (
     GameSerializer,

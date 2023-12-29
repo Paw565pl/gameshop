@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from django.db import transaction
+from rest_framework import serializers
 
 from games.models import Game, Platform
 from games.serializers import SimpleGameSerializer, PlatformSerializer
@@ -232,7 +232,7 @@ class SupportTicketSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid order id.")
 
         has_support_ticket_for_order = (
-            SupportTicket.objects.filter(order__id=order_id).count() != 0
+                SupportTicket.objects.filter(order__id=order_id).count() != 0
         )
         if has_support_ticket_for_order:
             raise serializers.ValidationError(
