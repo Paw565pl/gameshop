@@ -129,11 +129,12 @@ class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
     serializer_class = SupportTicketSerializer
     list_display = ["id", "status", "created_at", "updated_at"]
     list_filter = ["status", "created_at"]
-    readonly_fields = ["id", "created_at", "updated_at", "order_link", "messages_links"]
+    readonly_fields = ["created_at", "updated_at", "order_link", "messages_links"]
+    ordering = ["-created_at"]
     fieldsets = (
         (
             "General Information",
-            {"fields": ("id", "order_link", "status", "messages", "messages_links")},
+            {"fields": ("order_link", "status", "messages", "messages_links")},
         ),
         ("Timestamps", {"fields": ("created_at", "updated_at")}),
     )
