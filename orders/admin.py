@@ -160,8 +160,9 @@ class SupportTicketAdmin(admin.ModelAdmin, ExportJsonMixin):
         links = []
         messages = obj.messages.all()
         for message in messages:
+            inner_text = f"{message.author}: {message.message}"
             url = reverse("admin:orders_supportticketmessage_change", args=[message.id])
-            links.append('<a href="{}">{}</a><br/><br/>'.format(url, message.message))
+            links.append('<a href="{}">{}</a><br/><br/>'.format(url, inner_text))
         return mark_safe("".join(links))
 
 
