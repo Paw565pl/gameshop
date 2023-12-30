@@ -5,18 +5,42 @@ from .models import Game, Genre, Platform, Developer, Screenshot, Review
 
 
 class GenreSerializer(serializers.ModelSerializer):
+    games_count = serializers.SerializerMethodField()
+
+    def get_games_count(self, obj):
+        genre_id = self.context["view"].kwargs.get("pk")
+        if genre_id:
+            count = Game.objects.filter(genres__name=obj.name).count()
+            return count
+
     class Meta:
         model = Genre
         fields = "__all__"
 
 
 class PlatformSerializer(serializers.ModelSerializer):
+    games_count = serializers.SerializerMethodField()
+
+    def get_games_count(self, obj):
+        platform = self.context["view"].kwargs.get("pk")
+        if platform:
+            count = Game.objects.filter(platforms__name=obj.name).count()
+            return count
+
     class Meta:
         model = Platform
         fields = "__all__"
 
 
 class DeveloperSerializer(serializers.ModelSerializer):
+    games_count = serializers.SerializerMethodField()
+
+    def get_games_count(self, obj):
+        developer_id = self.context["view"].kwargs.get("pk")
+        if developer_id:
+            count = Game.objects.filter(developers__name=obj.name).count()
+            return count
+
     class Meta:
         model = Developer
         fields = "__all__"
