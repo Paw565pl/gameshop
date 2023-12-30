@@ -45,6 +45,11 @@ class ItemSerializer(serializers.ModelSerializer):
         quantity = validated_data["quantity"]
 
         try:
+            cart = Cart.objects.get(id=cart_id)
+        except Cart.DoesNotExist:
+            raise serializers.ValidationError("Invalid cart id.")
+
+        try:
             game = Game.objects.get(pk=game_id)
         except Game.DoesNotExist:
             raise serializers.ValidationError("Invalid game id.")
@@ -54,11 +59,11 @@ class ItemSerializer(serializers.ModelSerializer):
         except Platform.DoesNotExist:
             raise serializers.ValidationError("Invalid platform id.")
 
-        existing_item = Item.objects.filter(
+        item_in_cart = Item.objects.filter(
             cart__id=cart_id, game__id=game_id, platform__id=platform_id
         )
-        if existing_item.count() != 0:
-            existing_item_instance = existing_item.get()
+        if item_in_cart.count() != 0:
+            existing_item_instance = item_in_cart.get()
             existing_item_instance.quantity += quantity
             existing_item_instance.save()
 
@@ -69,10 +74,7 @@ class ItemSerializer(serializers.ModelSerializer):
         item.platform.add(platform)
         item.save()
 
-        cart = Cart.objects.get(id=cart_id)
         cart.items.add(item)
-        cart.save()
-
         return item
 
     class Meta:
@@ -95,7 +97,7 @@ class CartSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_total_price(cart: Cart):
         total_price = 0
-        cart_items = list(cart.items.all())  # noqa
+        cart_items = cart.items.all()  # noqa
         for item in cart_items:
             calculated_price = item.game.get().price.to_decimal() * item.quantity
             total_price += calculated_price
