@@ -52,7 +52,7 @@ class Address(models.Model):
     objects = models.DjongoManager()
 
     def __str__(self):
-        return f"Address for {self.first_name} {self.last_name}"
+        return f"Address of {self.first_name} {self.last_name}"
 
 
 class Order(models.Model):
@@ -130,3 +130,8 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    class Meta:
+        indexes = [
+            models.Index(name="username", fields=["username"]),
+        ]
