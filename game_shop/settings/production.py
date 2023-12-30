@@ -23,6 +23,10 @@ ALLOWED_HOSTS = []
 #     }
 # }
 
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 CSRF_COOKIE_SECURE = True
 
 SESSION_COOKIE_SECURE = True
