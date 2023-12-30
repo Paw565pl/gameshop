@@ -73,6 +73,9 @@ class Order(models.Model):
     )
     address = models.ArrayReferenceField(to=Address)
     total_price = Decimal128Field(max_digits=10, decimal_places=2)
+
+    promo_code = models.CharField(max_length=20, null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
