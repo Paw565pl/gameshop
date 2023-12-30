@@ -2,7 +2,7 @@ from rest_framework_nested import routers
 
 from . import views
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
 
 router.register(r"genres", views.GenreViewSet)
 router.register(r"platforms", views.PlatformViewSet)
@@ -12,7 +12,7 @@ router.register(
     r"favourite-games", views.FavouriteGameViewSet, basename="favourite-games"
 )
 
-game_router = routers.NestedDefaultRouter(router, r"games", lookup="game")
+game_router = routers.NestedSimpleRouter(router, r"games", lookup="game")
 game_router.register(
     r"screenshots", views.ScreenshotViewSet, basename="game-screenshots"
 )
