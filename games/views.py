@@ -1,4 +1,5 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, mixins, permissions, status
+from rest_framework.response import Response
 
 from .filters import GameFilter
 from .models import Game, Review, Screenshot, Genre, Platform, Developer
@@ -10,6 +11,7 @@ from .serializers import (
     GenreSerializer,
     PlatformSerializer,
     DeveloperSerializer,
+    AddFavouriteGameSerializer,
 )
 from .utils import check_if_game_exists
 
@@ -62,3 +64,43 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GameSerializer
     filterset_class = GameFilter
     ordering_fields = ["name", "released", "metacritic", "price"]
+
+
+class FavouriteGameViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
+):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        favourite_games = user.favourite_games.all()
+        return favourite_games
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return AddFavouriteGameSerializer
+        return GameSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        game = serializer.save()
+
+        serialized_game_data = GameSerializer(game).data
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serialized_game_data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+    def destroy(self, request, *args, **kwargs):
+        user = self.request.user
+        game = self.get_object()
+
+        user.favourite_games.remove(game)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
