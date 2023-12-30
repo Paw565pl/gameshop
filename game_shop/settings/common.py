@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "django_filters",
     "djoser",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "core",
     "games",
     "orders",
@@ -116,4 +117,5 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
