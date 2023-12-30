@@ -1,4 +1,5 @@
 from .common import *
+from datetime import timedelta
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-k32ernz5o^k8xa$-p%wb$7=k-6&_36p-63-!gkmy==v%srrjq8"
@@ -20,3 +21,5 @@ DATABASES = {
         },
     }
 }
+
+SIMPLE_JWT = {"ACCESS_TOKEN_LIFETIME": timedelta(days=365)}
