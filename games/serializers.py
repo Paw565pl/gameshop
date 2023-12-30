@@ -40,7 +40,11 @@ class ReviewSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         username = self.context["request"].user.username
         game_id = self.context["view"].kwargs["game_pk"]
-        game = Game.objects.get(pk=game_id)
+
+        try:
+            game = Game.objects.get(pk=game_id)
+        except Game.DoesNotExist:
+            raise serializers.ValidationError("Game not found")
 
         has_review = game.reviews.filter(author=username).count() != 0
         if has_review:
