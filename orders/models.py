@@ -118,7 +118,7 @@ class User(AbstractUser):
     first_name = None
     last_name = None
 
-    favourites = models.ArrayReferenceField(to=Game)
+    favourite_games = models.ArrayReferenceField(to=Game)
 
     address = models.ArrayReferenceField(to=Address)
     cart = models.ArrayReferenceField(to=Cart)
