@@ -1,3 +1,6 @@
+from re import match
+from decimal import Decimal
+
 from django.db import transaction
 from rest_framework import serializers
 
@@ -142,13 +145,26 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     items = ItemSerializer(many=True, read_only=True)
+
     status = serializers.CharField(read_only=True)
     address = serializers.SerializerMethodField(read_only=True)
     total_price = serializers.DecimalField(
         read_only=True, max_digits=10, decimal_places=2
     )
+    promo_code = serializers.CharField(allow_null=True, allow_blank=True)
+
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
+
+    @staticmethod
+    def validate_promo_code(promo_code: str):
+        if promo_code == "":
+            return None
+
+        pattern = r"^PROM_[A-Z0-9]{5}$"
+        if not match(pattern, promo_code):
+            raise serializers.ValidationError("Invalid promo code.")
+        return promo_code
 
     @staticmethod
     def get_address(order: Order):
@@ -177,8 +193,12 @@ class OrderSerializer(serializers.ModelSerializer):
         cart_items = cart.items.all()
         total_price = CartSerializer.get_total_price(cart)
 
+        promo_code = validated_data.get("promo_code")
+        if promo_code:
+            total_price = str(round(Decimal(total_price) * Decimal(0.97), 2))
+
         cart.delete()
-        order = Order.objects.create(total_price=total_price)
+        order = Order.objects.create(total_price=total_price, promo_code=promo_code)
 
         order.items.add(*cart_items)
         order.address.add(address)
@@ -193,6 +213,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "items",
             "status",
             "address",
+            "promo_code",
             "total_price",
             "created_at",
             "updated_at",
