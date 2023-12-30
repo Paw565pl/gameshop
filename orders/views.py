@@ -8,6 +8,7 @@ from orders.serializers import (
     AddressSerializer,
     SupportTicketSerializer,
 )
+from orders.utils import check_if_cart_exists
 
 
 # Create your views here.
@@ -34,9 +35,17 @@ class CartItemViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         cart_id = self.kwargs["cart_pk"]
         user_id = self.request.user.id
+
+        check_if_cart_exists(cart_id)
         return Item.objects.filter(cart__id=cart_id, cart__user__id=user_id).order_by(
             "id"
         )
+
+    def create(self, request, *args, **kwargs):
+        cart_id = self.kwargs["cart_pk"]
+        check_if_cart_exists(cart_id)
+
+        return super().create(request, *args, **kwargs)
 
 
 class OrderViewSet(
