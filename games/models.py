@@ -47,6 +47,7 @@ class Screenshot(models.Model):
 class Review(models.Model):
     author = models.CharField(max_length=255)
     is_positive = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
     content = models.TextField(
         validators=[
             validators.MinLengthValidator(10),
