@@ -5,45 +5,48 @@ from .models import Game, Genre, Platform, Developer, Screenshot, Review
 
 
 class GenreSerializer(serializers.ModelSerializer):
-    games_count = serializers.SerializerMethodField()
-
-    def get_games_count(self, obj):
-        genre_id = self.context["view"].kwargs.get("pk")
-        if genre_id:
-            count = Game.objects.filter(genres__name=obj.name).count()
-            return count
-
     class Meta:
         model = Genre
         fields = "__all__"
 
 
-class PlatformSerializer(serializers.ModelSerializer):
+class DetailGenreSerializer(GenreSerializer):
     games_count = serializers.SerializerMethodField()
 
-    def get_games_count(self, obj):
-        platform = self.context["view"].kwargs.get("pk")
-        if platform:
-            count = Game.objects.filter(platforms__name=obj.name).count()
-            return count
+    @staticmethod
+    def get_games_count(obj):
+        count = Game.objects.filter(genres__name=obj.name).count()
+        return count
 
+
+class PlatformSerializer(serializers.ModelSerializer):
     class Meta:
         model = Platform
         fields = "__all__"
 
 
-class DeveloperSerializer(serializers.ModelSerializer):
+class DetailPlatformSerializer(PlatformSerializer):
     games_count = serializers.SerializerMethodField()
 
-    def get_games_count(self, obj):
-        developer_id = self.context["view"].kwargs.get("pk")
-        if developer_id:
-            count = Game.objects.filter(developers__name=obj.name).count()
-            return count
+    @staticmethod
+    def get_games_count(obj):
+        count = Game.objects.filter(platforms__name=obj.name).count()
+        return count
 
+
+class DeveloperSerializer(serializers.ModelSerializer):
     class Meta:
         model = Developer
         fields = "__all__"
+
+
+class DetailDeveloperSerializer(DeveloperSerializer):
+    games_count = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_games_count(obj):
+        count = Game.objects.filter(developers__name=obj.name).count()
+        return count
 
 
 class ScreenshotSerializer(serializers.ModelSerializer):
@@ -128,7 +131,7 @@ class AddFavouriteGameSerializer(GameSerializer):
         try:
             game = Game.objects.get(pk=game_id)
         except Game.DoesNotExist:
-            raise serializers.ValidationError("Game not found")
+            raise serializers.ValidationError("Game not found.")
 
         has_game = user.favourite_games.filter(pk=game_id).count() != 0
         if has_game:
