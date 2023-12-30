@@ -12,6 +12,9 @@ from .serializers import (
     PlatformSerializer,
     DeveloperSerializer,
     AddFavouriteGameSerializer,
+    DetailGenreSerializer,
+    DetailPlatformSerializer,
+    DetailDeveloperSerializer,
 )
 from .utils import check_if_game_exists
 
@@ -19,17 +22,29 @@ from .utils import check_if_game_exists
 # Create your views here.
 class GenreViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Genre.objects.all().order_by("id")
-    serializer_class = GenreSerializer
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return DetailGenreSerializer
+        return GenreSerializer
 
 
 class PlatformViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Platform.objects.all().order_by("id")
-    serializer_class = PlatformSerializer
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return DetailPlatformSerializer
+        return PlatformSerializer
 
 
 class DeveloperViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Developer.objects.all().order_by("id")
-    serializer_class = DeveloperSerializer
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return DetailDeveloperSerializer
+        return DeveloperSerializer
 
 
 class ScreenshotViewSet(viewsets.ReadOnlyModelViewSet):
