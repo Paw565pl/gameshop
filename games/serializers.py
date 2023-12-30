@@ -67,7 +67,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         try:
             game = Game.objects.get(pk=game_id)
         except Game.DoesNotExist:
-            raise serializers.ValidationError("Game not found")
+            raise serializers.ValidationError("Game not found.")
 
         has_review = game.reviews.filter(author=username).count() != 0
         if has_review:
@@ -132,7 +132,7 @@ class AddFavouriteGameSerializer(GameSerializer):
 
         has_game = user.favourite_games.filter(pk=game_id).count() != 0
         if has_game:
-            raise serializers.ValidationError("Game already added to favourites")
+            raise serializers.ValidationError("Game already added to favourites.")
 
         user.favourite_games.add(game)
         return game
