@@ -8,6 +8,9 @@ router.register(r"genres", views.GenreViewSet)
 router.register(r"platforms", views.PlatformViewSet)
 router.register(r"developers", views.DeveloperViewSet)
 router.register(r"games", views.GameViewSet)
+router.register(
+    r"favourite-games", views.FavouriteGameViewSet, basename="favourite-games"
+)
 
 game_router = routers.NestedDefaultRouter(router, r"games", lookup="game")
 game_router.register(
