@@ -81,8 +81,8 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_class = GameFilter
     ordering_fields = ["name", "released", "metacritic", "price"]
 
-    @action(detail=False, methods=["get"], url_path="developed-per-year")
-    def developed_per_year(self, request):
+    @action(detail=False, methods=["get"], url_path="released-per-year")
+    def released_per_year(self, request):
         pipeline = [
             {"$group": {"_id": {"$year": "$released"}, "games_count": {"$sum": 1}}},
             {"$project": {"year": "$_id", "games_count": 1, "_id": 0}},
