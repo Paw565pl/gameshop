@@ -25,7 +25,7 @@ class GenreViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Genre.objects.all().order_by("id")
 
     def get_serializer_class(self):
-        if self.action == "retrieve":
+        if self.action == "retrieve":  # noqa
             return DetailGenreSerializer
         return GenreSerializer
 
@@ -34,7 +34,7 @@ class PlatformViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Platform.objects.all().order_by("id")
 
     def get_serializer_class(self):
-        if self.action == "retrieve":
+        if self.action == "retrieve":  # noqa
             return DetailPlatformSerializer
         return PlatformSerializer
 
@@ -43,7 +43,7 @@ class DeveloperViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Developer.objects.all().order_by("id")
 
     def get_serializer_class(self):
-        if self.action == "retrieve":
+        if self.action == "retrieve":  # noqa
             return DetailDeveloperSerializer
         return DeveloperSerializer
 
@@ -107,7 +107,7 @@ class FavouriteGameViewSet(
         return favourite_games
 
     def get_serializer_class(self):
-        if self.action == "create":
+        if self.action == "create":  # noqa
             return AddFavouriteGameSerializer
         return GameSerializer
 
