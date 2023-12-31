@@ -1,4 +1,5 @@
 from rest_framework import viewsets, mixins, permissions, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .filters import GameFilter
@@ -79,6 +80,16 @@ class GameViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GameSerializer
     filterset_class = GameFilter
     ordering_fields = ["name", "released", "metacritic", "price"]
+
+    @action(detail=False, methods=["get"])
+    def developed_per_year(self, request):
+        pipeline = [
+            {"$group": {"_id": {"$year": "$released"}, "games_count": {"$sum": 1}}},
+            {"$project": {"year": "$_id", "games_count": 1, "_id": 0}},
+            {"$sort": {"year": -1}},
+        ]
+        result = Game.objects.mongo_aggregate(pipeline)
+        return Response(result)
 
 
 class FavouriteGameViewSet(
