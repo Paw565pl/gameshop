@@ -47,6 +47,28 @@ class DeveloperViewSet(viewsets.ReadOnlyModelViewSet):
             return DetailDeveloperSerializer
         return DeveloperSerializer
 
+    @action(detail=False, methods=["get"], url_path="average-metacritic")
+    def average_metacritic(self, request):
+        pipeline = [
+            {"$unwind": "$developers_id"},
+            {
+                "$group": {
+                    "_id": "$developers_id",
+                    "average_metacritic": {"$avg": "$metacritic"},
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "id": "$_id",
+                    "average_metacritic": {"$round": ["$average_metacritic", 2]},
+                }
+            },
+            {"$sort": {"id": 1}},
+        ]
+        result = Game.objects.mongo_aggregate(pipeline)
+        return Response(result)
+
 
 class ScreenshotViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ScreenshotSerializer
