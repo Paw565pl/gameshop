@@ -13,6 +13,12 @@ class TestAddFavouriteGame(AuthenticatedAPITestCase):
             id=1, name="test", name_original="test", slug="test", price=1
         )
 
+    def test_no_user_returns_401(self):
+        response = self.client.post(self.url, self.test_data)
+        self.assertEqual(
+            response.status_code, 401, f"Invalid status code: {response.status_code}"
+        )
+
     def test_no_game_returns_400(self):
         self.authenticate()
         response = self.client.post(self.url, {"game_id": 2})
