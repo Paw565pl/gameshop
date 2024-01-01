@@ -1,4 +1,5 @@
 from .common import *
+from os import environ
 from datetime import timedelta
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -16,7 +17,7 @@ DATABASES = {
         "NAME": "game_shop_db",
         "ENFORCE_SCHEMA": True,
         "CLIENT": {
-            "host": "localhost",
+            "host": environ.get("MONGO_HOST") or "localhost",
             "port": 27017,
         },
     }
