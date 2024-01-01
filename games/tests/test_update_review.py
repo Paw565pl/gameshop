@@ -9,6 +9,10 @@ from games.models import Game
 class TestUpdateReview(AuthenticatedAPITestCase):
     test_data = {"content": 10 * "b"}
 
+    def get_url(self):
+        url = f"/api/games/{self.game.id}/reviews/{self.review_id}/"
+        return url
+
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
@@ -23,10 +27,6 @@ class TestUpdateReview(AuthenticatedAPITestCase):
         )
         self.review_id = response.json()["id"]
 
-    def get_url(self):
-        url = f"/api/games/{self.game.id}/reviews/{self.review_id}/"
-        return url
-
     def test_different_author_returns_403(self):
         new_user = get_user_model().objects.create(
             username="test1", password="test1", email="test1@test.com"
@@ -36,15 +36,13 @@ class TestUpdateReview(AuthenticatedAPITestCase):
             HTTP_AUTHORIZATION=f"Bearer {token.access_token}"  # noqa
         )
 
-        url = self.get_url()
-        response = self.client.patch(url, self.test_data)
+        response = self.client.patch(self.get_url(), self.test_data)
         self.assertEqual(
             response.status_code, 403, f"Invalid status code: {response.status_code}"
         )
 
     def test_update_returns_200(self):
-        url = self.get_url()
-        response = self.client.patch(url, self.test_data)
+        response = self.client.patch(self.get_url(), self.test_data)
         self.assertEqual(
             response.status_code, 200, f"Invalid status code: {response.status_code}"
         )
