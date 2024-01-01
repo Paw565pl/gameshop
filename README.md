@@ -1,5 +1,9 @@
 # GameShop - backend
 
+### Live demo
+
+[Hosted on render.com](https://game-shop-backend.onrender.com/api/games/)
+
 ### How to run it locally?
 
 It is fairly simple thanks to docker. Simply run this command after **cloning the repository**.
