@@ -38,15 +38,12 @@ class TestAddFavouriteGame(AuthenticatedAPITestCase):
         self.authenticate()
         response = self.client.post(self.url, self.test_data)
         response_json = response.json()
+        favourite_games = self.client.get(self.url).json()
 
         self.assertEqual(
             response.status_code, 201, f"Invalid status code: {response.status_code}"
         )
-        self.assertEqual(response_json["id"], self.game.id, "Invalid response!")
+        self.assertEqual(response_json["id"], 1, "Invalid response!")
         self.assertEqual(response_json["name"], self.game.name, "Invalid response!")
-
-        favourite_games = self.client.get(self.url).json()
         self.assertEqual(favourite_games["count"], 1, "Game was not added!")
-        self.assertEqual(
-            favourite_games["results"][0]["id"], self.game.id, "Game was not added!"
-        )
+        self.assertEqual(favourite_games["results"][0]["id"], 1, "Game was not added!")

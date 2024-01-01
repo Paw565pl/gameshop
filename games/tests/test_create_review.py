@@ -49,8 +49,11 @@ class TestCreateReview(AuthenticatedAPITestCase):
         self.authenticate()
         response = self.client.post(self.url, self.test_review)
         response_json = response.json()
+        reviews = self.client.get(self.url).json()
 
         self.assertEqual(
             response.status_code, 201, f"Invalid status code: {response.status_code}"
         )
         self.assertEqual(response_json["content"], 10 * "a", "Invalid response!")
+        self.assertEqual(reviews["count"], 1, "Review was not created!")
+        self.assertEqual(reviews["results"][0]["id"], 1, "Review was not created!")
