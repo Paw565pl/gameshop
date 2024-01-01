@@ -2,7 +2,6 @@ from .common import *
 from environ import Env
 
 env = Env(
-    MONGO_PORT=(int, 27017),
     RENDER_EXTERNAL_HOSTNAME=(str, None),
     DJANGO_LOG_LEVEL=(str, "WARNING"),
 )
@@ -26,11 +25,6 @@ DATABASES = {
         "ENFORCE_SCHEMA": True,
         "CLIENT": {
             "host": env("MONGO_HOST"),
-            "port": env("MONGO_PORT"),
-            # 'username': 'db-username',
-            # 'password': 'password',
-            # 'authSource': 'db-name',
-            # 'authMechanism': 'SCRAM-SHA-1'
         },
     }
 }
