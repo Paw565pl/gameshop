@@ -15,4 +15,4 @@ RUN /root/.local/share/pypoetry/venv/bin/poetry install --all-extras --compile
 
 COPY . .
 
-CMD sh -c "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn -b 0.0.0.0:8000 game_shop.wsgi"
+CMD sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"

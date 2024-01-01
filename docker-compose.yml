@@ -4,8 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    env_file:
-      - .env
+    environment:
+      - MONGO_HOST=db
     ports:
       - 8000:8000
     restart: always
