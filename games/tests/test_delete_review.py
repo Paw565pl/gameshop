@@ -5,10 +5,7 @@ from game_shop.test_base import AuthenticatedAPITestCase
 from games.models import Game
 
 
-# Create your tests here.
-class TestUpdateReview(AuthenticatedAPITestCase):
-    test_data = {"content": 10 * "b"}
-
+class TestDeleteReview(AuthenticatedAPITestCase):
     def get_url(self):
         url = f"/api/games/{self.game.id}/reviews/{self.review_id}/"
         return url
@@ -36,13 +33,13 @@ class TestUpdateReview(AuthenticatedAPITestCase):
             HTTP_AUTHORIZATION=f"Bearer {token.access_token}"  # noqa
         )
 
-        response = self.client.patch(self.get_url(), self.test_data)
+        response = self.client.delete(self.get_url())
         self.assertEqual(
             response.status_code, 403, f"Invalid status code: {response.status_code}"
         )
 
-    def test_update_returns_200(self):
-        response = self.client.patch(self.get_url(), self.test_data)
+    def test_delete_returns_204(self):
+        response = self.client.delete(self.get_url())
         self.assertEqual(
-            response.status_code, 200, f"Invalid status code: {response.status_code}"
+            response.status_code, 204, f"Invalid status code: {response.status_code}"
         )
