@@ -125,7 +125,7 @@ class FavouriteGameViewSet(
 
     def get_queryset(self):
         user = self.request.user
-        favourite_games = user.favourite_games.all()
+        favourite_games = user.favourite_games.all().order_by("-id")
         return favourite_games
 
     def get_serializer_class(self):
