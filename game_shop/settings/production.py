@@ -1,12 +1,20 @@
 from .common import *
 from environ import Env
 
-env = Env(MONGO_PORT=(int, 27017), DJANGO_LOG_LEVEL=(str, "WARNING"))
+env = Env(
+    MONGO_PORT=(int, 27017),
+    RENDER_EXTERNAL_HOSTNAME=(str, None),
+    DJANGO_LOG_LEVEL=(str, "WARNING"),
+)
 Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+RENDER_EXTERNAL_HOSTNAME = env("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
