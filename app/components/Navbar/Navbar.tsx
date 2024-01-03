@@ -5,7 +5,7 @@ import UserPanel from "./UserPanel";
 
 const Navbar = () => {
   return (
-    <nav className="py-1 flex justify-between items-center">
+    <nav className="py-1 flex justify-between items-center mb-10">
       <Logo />
       <SearchBar />
       <div className="flex items-center gap-2">
