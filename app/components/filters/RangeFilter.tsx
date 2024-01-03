@@ -44,14 +44,14 @@ const RangeFilter = ({ title, min, max, onChange }: RangeFilterProps) => {
                 name="minValue"
                 type="text"
                 placeholder="Min"
-                className="input input-bordered input-base-300 input-sm rounded w-full text-center focus:outline-none focus:border-primary"
+                className="input input-bordered input-base-300 input-sm rounded w-full text-center focus:outline-none focus:border-accent"
               />
               <span className="mx-1">-</span>
               <Field
                 name="maxValue"
                 type="text"
                 placeholder="Max"
-                className="input input-bordered input-base-300 input-sm rounded w-full text-center focus:outline-none focus:border-primary"
+                className="input input-bordered input-base-300 input-sm rounded w-full text-center focus:outline-none focus:border-accent"
               />
             </div>
             <div className="text-error text-xs text-center">
