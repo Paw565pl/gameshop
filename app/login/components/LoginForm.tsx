@@ -21,13 +21,13 @@ const initialValues: LoginFormValues = {
 const LoginForm = () => {
   return (
     <>
-      <h3 className="text-center text-6xl font-bold">Login Form</h3>
+      <h1 className="mb-4 text-center text-6xl font-bold">Login Form</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={() => {}}
       >
-        <Form className="lg:px-30 w-full xl:px-60">
+        <Form className="mx-auto sm:w-2/3">
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className="form-control w-full">
             <div className="label">
