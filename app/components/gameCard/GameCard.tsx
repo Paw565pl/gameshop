@@ -1,5 +1,6 @@
 import spiderman from "@/public/spiderman.jpg";
 import Image from "next/image";
+import { CgDetailsMore } from "react-icons/cg";
 import MetacriticBadge from "../common/MetacriticBadge";
 
 const GameCard = () => {
@@ -25,7 +26,8 @@ const GameCard = () => {
         <div className="card-actions justify-between">
           <MetacriticBadge metacritic={87} />
           <button className="btn btn-primary btn-xs sm:btn-md rounded h-full">
-            Add to cart
+            <CgDetailsMore className="text-xl" />
+            Details
           </button>
         </div>
       </div>

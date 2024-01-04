@@ -1,5 +1,5 @@
 import SideFilters from "./components/SideFilters";
-import GameCard from "./components/game/GameCard";
+import GameCard from "./components/gameCard";
 
 const RootPage = () => {
   return (
