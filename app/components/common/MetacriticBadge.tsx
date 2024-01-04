@@ -8,7 +8,7 @@ const MetacriticBadge = ({ metacritic }: MetacriticBadgeProps) => {
 
   return (
     <div
-      className="badge h-6 rounded-lg border-none text-lg font-bold text-white sm:h-12 sm:text-2xl"
+      className="badge h-8 rounded-lg border-none text-lg font-bold text-white sm:h-12 sm:text-2xl"
       style={{ backgroundColor }}
     >
       {metacritic}
