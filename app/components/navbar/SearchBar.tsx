@@ -4,15 +4,15 @@ import { GoSearch } from "react-icons/go";
 
 const SearchBar = () => {
   return (
-    <search className="flex items-center w-full mx-6 relative">
+    <search className="relative mx-6 flex w-full items-center">
       <GoSearch
-        className="absolute left-2 text-3xl cursor-pointer"
+        className="absolute left-2 cursor-pointer text-3xl"
         onClick={() => console.log("search")}
       />
       <input
         type="text"
         placeholder="Search for games here"
-        className="input input-bordered input-base-300 rounded-xl w-full focus:outline-none focus:border-accent pl-11"
+        className="input-base-300 input input-bordered w-full rounded-xl pl-11 focus:border-accent focus:outline-none"
       />
     </search>
   );

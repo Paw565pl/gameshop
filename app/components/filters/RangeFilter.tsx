@@ -31,7 +31,7 @@ const RangeFilter = ({ title, min, max, onChange }: RangeFilterProps) => {
 
   return (
     <div className="mb-4">
-      <h4 className="text-center text-sm mb-1">{title}</h4>
+      <h4 className="mb-1 text-center text-sm">{title}</h4>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -44,17 +44,17 @@ const RangeFilter = ({ title, min, max, onChange }: RangeFilterProps) => {
                 name="minValue"
                 type="text"
                 placeholder="Min"
-                className="input input-bordered input-base-300 input-sm rounded w-full text-center focus:outline-none focus:border-accent"
+                className="input-base-300 input input-bordered input-sm w-full rounded text-center focus:border-accent focus:outline-none"
               />
               <span className="mx-1">-</span>
               <Field
                 name="maxValue"
                 type="text"
                 placeholder="Max"
-                className="input input-bordered input-base-300 input-sm rounded w-full text-center focus:outline-none focus:border-accent"
+                className="input-base-300 input input-bordered input-sm w-full rounded text-center focus:border-accent focus:outline-none"
               />
             </div>
-            <div className="text-error text-xs text-center">
+            <div className="text-center text-xs text-error">
               {errors && Object.values(errors)[0]}
             </div>
           </Form>

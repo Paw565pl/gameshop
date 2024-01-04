@@ -39,7 +39,7 @@ const SideFilters = () => {
 
   return (
     <aside className="w-1/6">
-      <h3 className="text-center mb-6">Filters</h3>
+      <h3 className="mb-6 text-center">Filters</h3>
       <RangeFilter title="Price" min={0} max={1000} onChange={() => {}} />
       <RangeFilter title="Metacritic" min={0} max={100} onChange={() => {}} />
       <RangeFilter
