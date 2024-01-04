@@ -1,10 +1,13 @@
 import SideFilters from "./components/SideFilters";
+import GameCard from "./components/game/GameCard";
 
 const RootPage = () => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-10">
       <SideFilters />
-      <main>RootPage</main>
+      <main className="w-full">
+        <GameCard />
+      </main>
     </div>
   );
 };
