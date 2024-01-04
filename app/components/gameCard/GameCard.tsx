@@ -5,14 +5,14 @@ import MetacriticBadge from "../common/MetacriticBadge";
 
 const GameCard = () => {
   return (
-    <div className="card bg-base-100 shadow-xl lg:card-side">
+    <div className="card bg-base-100 shadow-xl md:card-side">
       <figure>
         <Image src={spiderman} alt="game image" />
       </figure>
       <div className="card-body gap-0">
         <h2 className="card-title text-4xl">Marvel&apos;s Spider-Man</h2>
         <div className="text-xs text-base-300">(Marvel&apos;s Spider-Man)</div>
-        <dl className="mt-2 grid w-full grid-cols-2 gap-0 text-xs sm:w-3/4 sm:text-base lg:w-full xl:w-1/2">
+        <dl className="mt-2 grid w-full grid-cols-2 gap-0 text-xs sm:w-3/4 sm:text-base md:w-full xl:w-1/2">
           <dt>Release date:</dt>
           <dd>2018-09-07</dd>
           <dt>Main developer:</dt>
