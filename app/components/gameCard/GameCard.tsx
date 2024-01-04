@@ -10,7 +10,9 @@ const GameCard = () => {
         <Image src={spiderman} alt="game image" />
       </figure>
       <div className="card-body gap-0">
-        <h2 className="card-title text-5xl">Marvel&apos;s Spider-Man</h2>
+        <h2 className="card-title text-4xl sm:text-5xl">
+          Marvel&apos;s Spider-Man
+        </h2>
         <div className="text-xs text-base-300">(Marvel&apos;s Spider-Man)</div>
         <dl className="my-4 grid w-full grid-cols-2 gap-0 text-sm sm:w-3/4 sm:text-base md:w-full xl:w-1/2">
           <dt>Release date:</dt>
