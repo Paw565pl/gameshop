@@ -21,7 +21,7 @@ const RootLayout = ({ children }: LayoutProps) => {
         className={`${inter.className} mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-6xl xl:px-0`}
       >
         <Navbar />
-        {children}
+        <main>{children}</main>
       </body>
     </html>
   );

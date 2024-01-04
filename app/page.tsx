@@ -5,9 +5,9 @@ const RootPage = () => {
   return (
     <div className="flex gap-10">
       <SideFilters />
-      <main className="w-full">
+      <section className="w-full">
         <GameCard />
-      </main>
+      </section>
     </div>
   );
 };
