@@ -1,6 +1,6 @@
 import MetacriticBadge from "@/app/components/common/MetacriticBadge";
 import Game from "@/app/entities/Game";
-import GameAttributes from "./GameAttributesList";
+import GameAttributes from "./GameAttributes";
 import ImageSlider from "./ImageSlider";
 
 interface GameDetailProps {
