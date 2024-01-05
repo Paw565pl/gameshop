@@ -29,7 +29,7 @@ DATABASES = {
     }
 }
 
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+MIDDLEWARE.insert(2, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 STORAGES = {
     "staticfiles": {
