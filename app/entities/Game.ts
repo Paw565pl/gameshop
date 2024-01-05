@@ -7,11 +7,11 @@ interface Game {
   name: string;
   name_original: string;
   slug: string;
-  released: string;
-  metacritic: number;
-  background_image: string;
-  website: string;
-  description_raw: string;
+  released: string | null;
+  metacritic: number | null;
+  background_image: string | null;
+  website: string | null;
+  description_raw: string | null;
   price: string;
   genres: Genre[];
   platforms: Platform[];
