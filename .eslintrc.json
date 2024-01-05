@@ -2,7 +2,8 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:jsx-a11y/recommended",
-    "prettier"
+    "prettier",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
   ],
   "plugins": ["jsx-a11y"]
 }

@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { ReactNode } from "react";
 import Navbar from "./components/navbar";
 import "./globals.css";
+import Providers from "./utils/Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +21,10 @@ const RootLayout = ({ children }: LayoutProps) => {
       <body
         className={`${inter.className} mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-6xl xl:px-0`}
       >
-        <Navbar />
-        <main>{children}</main>
+        <Providers>
+          <Navbar />
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );
