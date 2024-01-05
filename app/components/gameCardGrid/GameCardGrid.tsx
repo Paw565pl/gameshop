@@ -3,8 +3,8 @@
 import useFetchGames from "@/app/hooks/useFetchGames";
 import { Fragment, useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import GameCard from "../gameCard";
 import GameCardSkeleton from "../gameCardSkeleton";
-import GameCard from "./GameCard";
 
 const GameCardGrid = () => {
   const {

@@ -4,7 +4,7 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import SideFilters from "./components/SideFilters";
-import GameCardGrid from "./components/gameCard/GameCardGrid";
+import GameCardGrid from "./components/gameCardGrid";
 import usePrefetchGames from "./hooks/usePrefetchGames";
 
 const RootPage = async () => {
