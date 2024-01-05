@@ -1,14 +1,23 @@
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
 import SideFilters from "./components/SideFilters";
-import GameCard from "./components/gameCard";
+import GameCardGrid from "./components/gameCard/GameCardGrid";
+import usePrefetchGames from "./hooks/usePrefetchGames";
 
-const RootPage = () => {
+const RootPage = async () => {
+  const queryClient = new QueryClient();
+  await usePrefetchGames(queryClient);
+
   return (
-    <div className="flex gap-10">
-      <SideFilters />
-      <section className="w-full">
-        <GameCard />
-      </section>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="flex gap-10">
+        <SideFilters />
+        <GameCardGrid />
+      </div>
+    </HydrationBoundary>
   );
 };
 
