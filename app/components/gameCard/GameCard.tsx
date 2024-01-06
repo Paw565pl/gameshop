@@ -16,11 +16,11 @@ const GameCard = ({ game }: GameCardProps) => {
     <div className="card bg-base-100 shadow-xl md:card-side">
       <GameCardImage
         src={game.background_image}
-        alt={`${game.name} image`}
-        slug={game.slug}
+        name={game.name}
+        id={game.id}
       />
       <div className="card-body w-full gap-0">
-        <GameCardTitle name={game.name} slug={game.slug} />
+        <GameCardTitle name={game.name} id={game.id} />
         <GameCardSecondaryTitle nameOriginal={game.name_original} />
         <GameCardAttributes
           released={game.released}
@@ -30,7 +30,7 @@ const GameCard = ({ game }: GameCardProps) => {
         <GameCardPrice price={game.price} />
         <div className="card-actions justify-between">
           <MetacriticBadge metacritic={game.metacritic} />
-          <GameCardButton slug={game.slug} />
+          <GameCardButton id={game.id} />
         </div>
       </div>
     </div>

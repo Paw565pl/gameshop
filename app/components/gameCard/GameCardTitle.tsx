@@ -2,13 +2,13 @@ import Link from "next/link";
 
 interface GameCardTitleProps {
   name: string;
-  slug: string;
+  id: number;
 }
 
-const GameCardTitle = ({ name, slug }: GameCardTitleProps) => {
+const GameCardTitle = ({ name, id }: GameCardTitleProps) => {
   return (
     <h2 className="card-title text-4xl sm:text-5xl">
-      <Link href={`/game/${slug}`}>{name}</Link>
+      <Link href={`/game/${id}`}>{name}</Link>
     </h2>
   );
 };

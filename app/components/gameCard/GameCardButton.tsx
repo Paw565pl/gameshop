@@ -2,12 +2,12 @@ import Link from "next/link";
 import { CgDetailsMore } from "react-icons/cg";
 
 interface GameCardButtonProps {
-  slug: string;
+  id: number;
 }
 
-const GameCardButton = ({ slug }: GameCardButtonProps) => {
+const GameCardButton = ({ id }: GameCardButtonProps) => {
   return (
-    <Link href={`/game/${slug}`}>
+    <Link href={`/game/${id}`}>
       <button className="btn btn-primary btn-sm h-full rounded sm:btn-md">
         <CgDetailsMore className="text-xl" />
         Details
