@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { fetchGames } from "./useFetchGames";
+import { fetchGames } from "../client/useFetchGames";
 
 const usePrefetchGames = async (queryClient: QueryClient) =>
   queryClient.prefetchInfiniteQuery({
