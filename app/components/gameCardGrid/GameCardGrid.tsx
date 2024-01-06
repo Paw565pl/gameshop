@@ -10,14 +10,19 @@ const GameCardGrid = () => {
   const {
     data: games,
     isSuccess,
+    isFetching,
+    isError,
     fetchNextPage,
     hasNextPage,
   } = useFetchGames();
 
+  const skeletons = Array.from(Array(5).keys());
   const fetchedGamesCount = useMemo(
     () => games?.pages.reduce((acc, page) => acc + page.results.length, 0),
     [games],
   );
+
+  if (isError) return <div>Something went wrong!</div>;
 
   return (
     <section className="w-full">
@@ -28,6 +33,8 @@ const GameCardGrid = () => {
         loader={<GameCardSkeleton />}
         className="space-y-4 px-1"
       >
+        {isFetching &&
+          skeletons.map((_, index) => <GameCardSkeleton key={index} />)}
         {isSuccess &&
           games.pages.map((page, index) => (
             <Fragment key={index}>
