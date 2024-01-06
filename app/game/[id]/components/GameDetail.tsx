@@ -1,8 +1,8 @@
-import MetacriticBadge from "@/app/components/common/MetacriticBadge";
 import Screenshot from "@/app/entities/Screenshot";
 import useFetchGame from "@/app/hooks/server/useFetchGame";
 import useFetchGameScreenshots from "@/app/hooks/server/useFetchGameScreenshots";
 import GameAttributes from "./GameAttributes";
+import GameTitle from "./GameTitle";
 import ImageSlider from "./ImageSlider";
 
 interface GameDetailProps {
@@ -32,13 +32,11 @@ const GameDetail = async ({ id }: GameDetailProps) => {
     <article className="space-y-8">
       <ImageSlider images={images} name={game.name} />
       <div className="xl:flex xl:justify-between">
-        <header>
-          <div className="flex items-center gap-2">
-            <h2 className="text-4xl font-semibold sm:text-5xl">{game.name}</h2>
-            <MetacriticBadge metacritic={game.metacritic} />
-          </div>
-          <div className="pl-1 text-xs text-base-300">{game.name_original}</div>
-        </header>
+        <GameTitle
+          name={game.name}
+          nameOriginal={game.name_original}
+          metacritic={game.metacritic}
+        />
         <div className="mt-4 space-y-2 xl:mt-0 xl:text-right">
           <div className="text-xl">{game.price} PLN</div>
           <div>
