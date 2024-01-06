@@ -4,18 +4,18 @@ import Link from "next/link";
 
 interface GameCardImageProps {
   src: string | null;
-  alt: string;
-  slug: string;
+  name: string;
+  id: number;
 }
 
-const GameCardImage = ({ src, alt, slug }: GameCardImageProps) => {
+const GameCardImage = ({ src, name, id }: GameCardImageProps) => {
   return (
     <figure className="md:w-3/4">
-      <Link href={`/game/${slug}`} className="h-min w-full">
+      <Link href={`/game/${id}`} className="h-min w-full">
         <Image
           src={src || noImagePlaceholder}
-          alt={alt}
-          width={400}
+          alt={src ? `${name} image` : "no image placeholder"}
+          width={600}
           height={400}
           className="w-full"
         />
