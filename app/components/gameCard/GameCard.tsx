@@ -28,7 +28,7 @@ const GameCard = ({ game }: GameCardProps) => {
           <Link href={`/game/${game.slug}`}>{game.name}</Link>
         </h2>
         <div className="text-xs text-base-300">{game.name_original}</div>
-        <dl className="my-4 grid w-full grid-cols-2 gap-0 text-sm sm:w-3/4 sm:text-base md:w-full xl:w-3/4">
+        <dl className="my-4 grid w-full grid-cols-2 gap-0 text-sm sm:w-3/4 sm:text-base md:w-full xl:w-2/3">
           <dt>Release date:</dt>
           <dd>{game.released ? game.released : "N/A"}</dd>
           <dt>Main developer:</dt>
