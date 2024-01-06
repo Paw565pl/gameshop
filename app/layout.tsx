@@ -23,7 +23,7 @@ const RootLayout = ({ children }: LayoutProps) => {
       >
         <Providers>
           <Navbar />
-          <main>{children}</main>
+          <main className="my-8">{children}</main>
         </Providers>
       </body>
     </html>
