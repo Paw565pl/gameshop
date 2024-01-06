@@ -2,6 +2,7 @@ import Screenshot from "@/app/entities/Screenshot";
 import useFetchGame from "@/app/hooks/server/useFetchGame";
 import useFetchGameScreenshots from "@/app/hooks/server/useFetchGameScreenshots";
 import GameAttributes from "./GameAttributes";
+import GameBuy from "./GameBuy";
 import GameTitle from "./GameTitle";
 import ImageSlider from "./ImageSlider";
 
@@ -39,20 +40,7 @@ const GameDetail = async ({ id }: GameDetailProps) => {
         />
         <div className="mt-4 space-y-2 xl:mt-0 xl:text-right">
           <div className="text-xl">{game.price} PLN</div>
-          <div>
-            <select
-              name="platform"
-              id="platform"
-              className="select select-bordered select-md mb-2 block w-full rounded focus:border-accent focus:outline-none"
-            >
-              {game.platforms.map((platform) => (
-                <option value={platform.id} key={platform.id}>
-                  {platform.name}
-                </option>
-              ))}
-            </select>
-            <button className="btn btn-md w-full">Add to cart</button>
-          </div>
+          <GameBuy platforms={game.platforms} />
         </div>
       </div>
       <GameAttributes
