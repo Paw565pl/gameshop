@@ -1,20 +1,13 @@
 "use client";
 
 import FormInput from "@/app/components/common/FormInput";
+import loginUserSchema, {
+  LoginUserValues,
+} from "@/app/schemas/loginUserSchema";
 import { Form, Formik } from "formik";
 import Link from "next/link";
-import { InferType, object, string } from "yup";
 
-const validationSchema = object({
-  username: string().required("username is required"),
-  password: string()
-    .required("password is required")
-    .min(8, "password's minimum length is 8 characters"),
-});
-
-type LoginFormValues = InferType<typeof validationSchema>;
-
-const initialValues: LoginFormValues = {
+const initialValues: LoginUserValues = {
   username: "",
   password: "",
 };
@@ -25,7 +18,7 @@ const LoginForm = () => {
       <h1 className="mb-4 text-center text-6xl font-bold">Login Form</h1>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={loginUserSchema}
         onSubmit={() => {}}
       >
         <Form className="mx-auto sm:w-2/3">
