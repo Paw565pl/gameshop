@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 import SideFilters from "./components/SideFilters";
 import GameCardGrid from "./components/gameCardGrid";
-import usePrefetchGames from "./hooks/usePrefetchGames";
+import usePrefetchGames from "./hooks/server/usePrefetchGames";
 
 const RootPage = async () => {
   const queryClient = new QueryClient();

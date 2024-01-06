@@ -1,6 +1,6 @@
 "use client";
 
-import useFetchGames from "@/app/hooks/useFetchGames";
+import useFetchGames from "@/app/hooks/client/useFetchGames";
 import { Fragment, useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import GameCard from "../gameCard";
