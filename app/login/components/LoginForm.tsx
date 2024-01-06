@@ -1,6 +1,7 @@
 "use client";
 
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import FormInput from "@/app/components/common/FormInput";
+import { Form, Formik } from "formik";
 import Link from "next/link";
 import { InferType, object, string } from "yup";
 
@@ -28,40 +29,8 @@ const LoginForm = () => {
         onSubmit={() => {}}
       >
         <Form className="mx-auto sm:w-2/3">
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Username</span>
-            </div>
-            <Field
-              type="text"
-              name="username"
-              id="username"
-              className="input-base-300 input input-bordered w-full rounded-xl focus:border-accent focus:outline-none"
-            />
-            <ErrorMessage
-              name="username"
-              className="text-error"
-              component="p"
-            />
-          </label>
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Password</span>
-            </div>
-            <Field
-              type="text"
-              name="password"
-              id="password"
-              className="input-base-300 input input-bordered w-full rounded-xl focus:border-accent focus:outline-none"
-            />
-            <ErrorMessage
-              name="password"
-              className="text-error"
-              component="p"
-            />
-          </label>
+          <FormInput labelText="Username" name="username" type="text" />
+          <FormInput labelText="Password" name="password" type="password" />
           <button type="submit" className="btn btn-block mt-3 rounded text-lg">
             Log In
           </button>
