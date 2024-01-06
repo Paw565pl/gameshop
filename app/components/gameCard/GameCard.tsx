@@ -40,11 +40,7 @@ const GameCard = ({ game }: GameCardProps) => {
           {game.price} PLN
         </div>
         <div className="card-actions justify-between">
-          {game.metacritic ? (
-            <MetacriticBadge metacritic={game.metacritic} />
-          ) : (
-            <div></div>
-          )}
+          <MetacriticBadge metacritic={game.metacritic} />
           <Link href={`/game/${game.slug}`}>
             <button className="btn btn-primary btn-sm h-full rounded sm:btn-md">
               <CgDetailsMore className="text-xl" />
