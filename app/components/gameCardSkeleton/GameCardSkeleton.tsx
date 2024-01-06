@@ -1,5 +1,5 @@
 import MetacriticBadgeSkeleton from "../common/MetacriticBadge/MetacriticBadgeSkeleton";
-import GameCardAttributeSkeleton from "./GameCardAttributeSkeleton";
+import GameCardAttributesSkeleton from "./GameCardAttributesSkeleton";
 import GameCardButtonSkeleton from "./GameCardButtonSkeleton";
 import GameCardImageSkeleton from "./GameCardImageSkeleton";
 import GameCardPriceSkeleton from "./GameCardPriceSkeleton";
@@ -13,9 +13,7 @@ const GameCardSkeleton = () => {
       <div className="card-body gap-0">
         <GameCardTitleSkeleton />
         <GameCardSecondaryTitleSkeleton />
-        <GameCardAttributeSkeleton />
-        <GameCardAttributeSkeleton />
-        <GameCardAttributeSkeleton />
+        <GameCardAttributesSkeleton />
         <div className="card-actions mb-1 items-end justify-end sm:text-xl">
           <GameCardPriceSkeleton />
         </div>
