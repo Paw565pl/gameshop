@@ -4,10 +4,14 @@ import NavbarLink from "./NavbarLink";
 const AuthPanel = () => {
   return (
     <>
-      <NavbarLink title="Login" icon={<RiDoorLockFill className="text-2xl"/>} href="/login" />
+      <NavbarLink
+        title="Login"
+        icon={<RiDoorLockFill className="text-2xl" />}
+        href="/login"
+      />
       <NavbarLink
         title="Register"
-        icon={<RiHealthBookFill className="text-2xl"/>}
+        icon={<RiHealthBookFill className="text-2xl" />}
         href="/register"
       />
     </>
