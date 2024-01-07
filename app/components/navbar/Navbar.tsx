@@ -1,3 +1,5 @@
+import ConditionalComponent from "../common/ConditionalComponent";
+import AuthPanel from "./AuthPanel";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import ThemeSwitch from "./ThemeSwitch";
@@ -9,7 +11,10 @@ const Navbar = () => {
       <Logo />
       <SearchBar />
       <div className="flex items-center gap-2">
-        <UserPanel />
+        <ConditionalComponent
+          authenticatedComponent={<UserPanel />}
+          anonymousComponent={<AuthPanel />}
+        />
         <ThemeSwitch />
       </div>
     </nav>
