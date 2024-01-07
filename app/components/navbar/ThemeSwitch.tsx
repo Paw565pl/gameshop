@@ -6,6 +6,7 @@ const ThemeSwitch = () => {
   const [isDark, setIsdark] = useState<boolean>(
     JSON.parse(localStorage.getItem("isdark") || "false"),
   );
+
   useEffect(() => {
     localStorage.setItem("isdark", JSON.stringify(isDark));
   }, [isDark]);
