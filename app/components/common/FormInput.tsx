@@ -8,6 +8,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const FormInput = ({ name, labelText, ...props }: InputProps) => {
   return (
+    // eslint-disable-next-line jsx-a11y/label-has-associated-control
     <label className="form-control w-full">
       <div className="label">
         <span className="label-text">{labelText}</span>
