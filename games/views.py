@@ -83,6 +83,7 @@ class ScreenshotViewSet(viewsets.ReadOnlyModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    ordering = ["-created_at"]
 
     def get_queryset(self):
         game_id = self.kwargs["game_pk"]
