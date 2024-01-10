@@ -18,7 +18,8 @@ const hasTokens = () => {
   if (typeof window !== "undefined") {
     const result =
       !!localStorage.getItem("access-token") &&
-      !!localStorage.getItem("refresh-token");
+      !!localStorage.getItem("refresh-token") &&
+      !!localStorage.getItem("username");
 
     return result;
   }
