@@ -21,7 +21,12 @@ const AddReviewForm = ({ gameId }: AddReviewFormProps) => {
   const [toast, setToast] = useState<ToastProps | null>(null);
   const { mutate: addReview } = useAddGameReview(gameId);
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated)
+    return (
+      <h2 className="mb-2 mt-6 flex justify-between text-xl font-semibold">
+        Reviews
+      </h2>
+    );
 
   const handleSubmit = (formValues: ReviewValues) => {
     addReview(formValues, {
@@ -50,7 +55,7 @@ const AddReviewForm = ({ gameId }: AddReviewFormProps) => {
   return (
     <section>
       {toast && <Toast variant={toast.variant}>{toast.children}</Toast>}
-      <h2 className="mt-6 flex justify-between text-xl font-semibold">
+      <h2 className="mb-2 mt-6 flex justify-between text-xl font-semibold">
         Reviews
       </h2>
       <Formik
