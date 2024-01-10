@@ -16,7 +16,7 @@ const ReviewsList = ({ gameId }: ReviewsListProps) => {
   const {
     data: reviews,
     isSuccess,
-    isFetching,
+    isLoading,
     isError,
     fetchNextPage,
     hasNextPage,
@@ -38,7 +38,7 @@ const ReviewsList = ({ gameId }: ReviewsListProps) => {
         loader={<ReviewSkeleton />}
         className="space-y-4 px-1 pb-2"
       >
-        {isFetching && <ReviewSkeleton />}
+        {isLoading && <ReviewSkeleton />}
         {isSuccess &&
           reviews?.pages.map((page, index) => (
             <Fragment key={index}>
