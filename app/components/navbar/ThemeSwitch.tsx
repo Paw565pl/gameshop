@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 
 const ThemeSwitch = () => {
   const [isDark, setIsdark] = useState<boolean>(
-    JSON.parse(localStorage.getItem("isdark") || "false"),
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("isdark") || "false")
+      : false,
   );
 
   useEffect(() => {
