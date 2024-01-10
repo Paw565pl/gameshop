@@ -6,11 +6,11 @@ interface ReviewTitleProps {
 }
 
 const ReviewTitle = ({ author, created_at }: ReviewTitleProps) => {
-  const parsedDate = new Date(created_at).toLocaleString();
+  const parsedDate = new Date(created_at).toLocaleString("pl-PL");
 
   return (
     <h2 className="card-title">
-      <FaUser className="text-2xl" /> {author}
+      <FaUser className="text-xl sm:text-2xl" /> {author}
       <div className="text-xs font-normal">created at: {parsedDate}</div>
     </h2>
   );
