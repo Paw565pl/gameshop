@@ -23,9 +23,11 @@ const useLoginUser = () => {
   return useMutation<AuthTokens, AxiosError, LoginUserValues>({
     mutationKey: ["loginUser"],
     mutationFn: postLoginData,
-    onSuccess: (data) => {
+    onSuccess: (data, values) => {
       const { access, refresh } = data;
-      loginUser({ access, refresh });
+      const { username } = values;
+
+      loginUser({ access, refresh }, username);
 
       const returnUrl = searchParams.get("returnUrl");
       router.push(returnUrl || "/");
