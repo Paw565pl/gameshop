@@ -48,7 +48,7 @@ const ReviewsList = ({ gameId }: ReviewsListProps) => {
                   key={review.id}
                 >
                   <ReviewLikeIcon is_positive={review.is_positive} />
-                  <div className="card-body">
+                  <div className="card-body p-2 sm:p-8">
                     <ReviewTitle
                       author={review.author}
                       created_at={review.created_at}
