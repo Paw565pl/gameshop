@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import GameDetail from "./components";
 import ReviewsList from "./components/ReviewsList";
+import AddReviewForm from "./components/ReviewsList/AddReviewForm";
 
 interface GameDetailPageProps {
   params: { id: number };
@@ -18,6 +19,7 @@ const GameDetailPage = async ({ params: { id } }: GameDetailPageProps) => {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <GameDetail id={id} />
+      <AddReviewForm gameId={id} />
       <ReviewsList gameId={id} />
     </HydrationBoundary>
   );
