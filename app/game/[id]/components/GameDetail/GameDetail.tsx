@@ -1,10 +1,12 @@
 import Screenshot from "@/app/entities/Screenshot";
 import useFetchGame from "@/app/hooks/server/useFetchGame";
 import useFetchGameScreenshots from "@/app/hooks/server/useFetchGameScreenshots";
+import FavouriteButton from "./FavouriteButton";
 import GameAttributes from "./GameAttributes";
 import GameBuy from "./GameBuy";
 import GameTitle from "./GameTitle";
 import ImageSlider from "./ImageSlider";
+import WebsiteButton from "./WebsiteButton";
 
 interface GameDetailProps {
   id: number;
@@ -33,11 +35,17 @@ const GameDetail = async ({ id }: GameDetailProps) => {
     <article className="space-y-8">
       <ImageSlider images={images} name={game.name} />
       <div className="xl:flex xl:justify-between">
-        <GameTitle
-          name={game.name}
-          nameOriginal={game.name_original}
-          metacritic={game.metacritic}
-        />
+        <header>
+          <GameTitle
+            name={game.name}
+            nameOriginal={game.name_original}
+            metacritic={game.metacritic}
+          />
+          <div className="mt-2 flex items-center gap-2">
+            <FavouriteButton id={game.id} />
+            <WebsiteButton href={game.website} />
+          </div>
+        </header>
         <div className="mt-4 space-y-2 xl:mt-0 xl:text-right">
           <div className="text-xl">{game.price} PLN</div>
           <GameBuy platforms={game.platforms} />
