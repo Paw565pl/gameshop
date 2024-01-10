@@ -3,8 +3,7 @@
 import useFetchGameReviews from "@/app/hooks/client/useFetchGameReviews";
 import { Fragment, useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import AddReviewForm from "./AddReviewForm";
-import ReviewButtons from "./ReviewButtons";
+import ReviewDeleteButton from "./ReviewDeleteButton";
 import ReviewLikeIcon from "./ReviewLikeIcon";
 import ReviewSkeleton from "./ReviewSkeleton";
 import ReviewTitle from "./ReviewTitle";
@@ -32,10 +31,6 @@ const ReviewsList = ({ gameId }: ReviewsListProps) => {
 
   return (
     <section>
-      <h2 className="mt-6 flex justify-between text-xl font-semibold">
-        Reviews
-      </h2>
-      <AddReviewForm />
       <InfiniteScroll
         dataLength={fetchedGameReviewsCount || 0}
         hasMore={hasNextPage}
@@ -59,10 +54,10 @@ const ReviewsList = ({ gameId }: ReviewsListProps) => {
                       created_at={review.created_at}
                     />
                     <p>{review.content}</p>
-                    <ReviewButtons
+                    <ReviewDeleteButton
                       author={review.author}
-                      handleEdit={() => {}}
-                      handleDelete={() => {}}
+                      gameId={gameId}
+                      reviewId={review.id}
                     />
                   </div>
                 </div>

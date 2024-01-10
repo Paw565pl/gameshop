@@ -3,18 +3,17 @@
 import { AuthContext } from "@/app/contexts/AuthContextProvider";
 import { useContext } from "react";
 import { FaTrash } from "react-icons/fa";
-import { FaPencil } from "react-icons/fa6";
 
 interface ReviewButtonsProps {
   author: string;
-  handleEdit: () => void;
-  handleDelete: () => void;
+  gameId: number;
+  reviewId: number;
 }
 
-const ReviewButtons = ({
+const ReviewDeleteButton = ({
   author,
-  handleEdit,
-  handleDelete,
+  gameId,
+  reviewId,
 }: ReviewButtonsProps) => {
   const { isAuthenticated, getUser } = useContext(AuthContext);
   const username = getUser();
@@ -23,20 +22,11 @@ const ReviewButtons = ({
 
   return (
     <div className="card-actions justify-end">
-      <button
-        className="btn btn-info flex items-center gap-1"
-        onClick={handleEdit}
-      >
-        <FaPencil /> Edit
-      </button>
-      <button
-        className="btn btn-error flex items-center gap-1"
-        onClick={handleDelete}
-      >
+      <button className="btn btn-error flex items-center gap-1">
         <FaTrash /> Delete
       </button>
     </div>
   );
 };
 
-export default ReviewButtons;
+export default ReviewDeleteButton;
