@@ -39,6 +39,7 @@ const ImageSlider = ({ images, name }: ImageSliderProps) => {
             alt={`${name} image ${image.id}`}
             width={image.width}
             height={image.height}
+            className="mx-auto w-full"
           />
         ))}
       </Slide>
