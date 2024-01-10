@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 import AuthTokens from "../entities/AuthTokens";
 
 interface AuthContext {
@@ -14,53 +14,43 @@ interface AuthContextProviderProps {
   children: ReactNode;
 }
 
-const hasTokens = () => {
-  if (typeof window !== "undefined") {
-    const result =
+export const AuthContext = createContext<AuthContext>({} as AuthContext);
+
+const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const hasTokens =
       !!localStorage.getItem("access-token") &&
       !!localStorage.getItem("refresh-token") &&
       !!localStorage.getItem("username");
 
-    return result;
-  }
-  return false;
-};
-
-export const AuthContext = createContext<AuthContext>({} as AuthContext);
-
-const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(hasTokens());
+    setIsAuthenticated(hasTokens);
+  }, []);
 
   const loginUser = (authTokens: AuthTokens, username: string) => {
-    typeof window !== "undefined"
-      ? localStorage.setItem("access-token", authTokens.access)
-      : null;
-    typeof window !== "undefined"
-      ? localStorage.setItem("refresh-token", authTokens.refresh)
-      : null;
-    typeof window !== "undefined"
-      ? localStorage.setItem("username", username)
-      : null;
+    localStorage.setItem("access-token", authTokens.access);
+    localStorage.setItem("refresh-token", authTokens.refresh);
+    localStorage.setItem("username", username);
 
     setIsAuthenticated(true);
   };
 
   const logoutUser = () => {
-    typeof window !== "undefined"
-      ? localStorage.removeItem("access-token")
-      : null;
-    typeof window !== "undefined"
-      ? localStorage.removeItem("refresh-token")
-      : null;
-    typeof window !== "undefined" ? localStorage.removeItem("username") : null;
+    localStorage.removeItem("access-token");
+    localStorage.removeItem("refresh-token");
+    localStorage.removeItem("username");
 
     setIsAuthenticated(false);
   };
 
   const getUser = () => {
-    const username =
-      typeof window !== "undefined" ? localStorage.getItem("username") : null;
-    return username;
+    try {
+      const username = localStorage.getItem("username");
+      return username;
+    } catch (error) {
+      return "";
+    }
   };
 
   return (

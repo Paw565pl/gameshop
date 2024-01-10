@@ -1,19 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 const ThemeSwitch = () => {
-  const [isDark, setIsdark] = useState<boolean>(
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("isdark") || "false")
-      : false,
-  );
+  const [isDark, setIsdark] = useState<boolean>(false);
 
-  useEffect(() => {
-    localStorage.setItem("isdark", JSON.stringify(isDark));
+  useLayoutEffect(() => {
+    const savedIsDark = localStorage.getItem("iaDark");
+
+    if (savedIsDark) {
+      setIsdark(JSON.parse(savedIsDark));
+    } else {
+      localStorage.setItem("iaDark", JSON.stringify(isDark));
+    }
   }, [isDark]);
 
-  const handleChange = () => setIsdark((prevValue) => !prevValue);
+  const handleChange = () =>
+    setIsdark((prevValue) => {
+      const newValue = !prevValue;
+      localStorage.setItem("iaDark", JSON.stringify(newValue));
+      return newValue;
+    });
 
   return (
     <label className="swap swap-rotate">
