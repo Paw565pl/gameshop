@@ -1,8 +1,9 @@
 "use client";
 
 import { AuthContext } from "@/app/contexts/AuthContextProvider";
+import useAddFavouriteGame from "@/app/hooks/client/useAddFavouriteGame";
 import usefetchIsGameFavourite from "@/app/hooks/client/useFetchIsGameFavourite";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoHeart } from "react-icons/io5";
 
@@ -12,6 +13,9 @@ interface FavouriteButtonProps {
 
 const FavouriteButton = ({ id }: FavouriteButtonProps) => {
   const { isAuthenticated } = useContext(AuthContext);
+  const { data: isFavourite } = usefetchIsGameFavourite(id);
+  const { mutate: addFavouriteGame } = useAddFavouriteGame(id);
+  const [isLiked, setIsLiked] = useState<boolean>(isFavourite || false);
 
   if (!isAuthenticated)
     return (
@@ -20,15 +24,29 @@ const FavouriteButton = ({ id }: FavouriteButtonProps) => {
       </button>
     );
 
-  const { data: isLiked } = usefetchIsGameFavourite(id);
+  const handleLike = () => {
+    const prevState = isLiked;
+    setIsLiked((prevIsLiked) => !prevIsLiked);
+    addFavouriteGame(undefined, {
+      onError: () => {
+        setIsLiked(prevState);
+      },
+    });
+  };
 
-  const icon = isLiked ? (
-    <IoHeart className="text-3xl" />
-  ) : (
-    <IoMdHeartEmpty className="text-3xl" />
+  if (!isLiked) {
+    return (
+      <button className="btn btn-circle btn-error" onClick={handleLike}>
+        <IoMdHeartEmpty className="text-3xl" />
+      </button>
+    );
+  }
+
+  return (
+    <button className="btn btn-circle btn-error">
+      <IoHeart className="text-3xl" />
+    </button>
   );
-
-  return <button className="btn btn-circle btn-error">{icon}</button>;
 };
 
 export default FavouriteButton;
