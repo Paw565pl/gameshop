@@ -6,11 +6,11 @@ export interface ToastProps {
 }
 
 const Toast = ({ variant, children }: ToastProps) => {
-  const variantClass = `alert-${variant}`;
+  const variantClass = `alert alert-${variant}`; // alert-info or alert-success or alert-warning or alert-error
 
   return (
     <div className="toast toast-center toast-top min-w-max whitespace-break-spaces">
-      <div className={`alert ${variantClass}`}>
+      <div className={variantClass}>
         <span>{children}</span>
       </div>
     </div>
