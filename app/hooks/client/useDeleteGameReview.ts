@@ -6,13 +6,12 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 const deleteReview = async (gameId: number, reviewId: number) => {
   const response = await apiService.delete(
     `/games/${gameId}/reviews/${reviewId}/`,
   );
-
   return response;
 };
 
@@ -21,7 +20,7 @@ const useDeleteGameReview = (gameId: number, reviewId: number) => {
   const queryKey = ["game", gameId, "reviews"];
 
   return useMutation<
-    unknown,
+    AxiosResponse,
     AxiosError,
     void,
     InfiniteData<PaginatedResponse<Review>>
