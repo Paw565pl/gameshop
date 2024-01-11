@@ -1,10 +1,13 @@
 import FormInput from "@/app/components/common/FormInput";
 import FormSubmitButton from "@/app/components/common/FormSubmitButton";
+import useFetchUserInfo from "@/app/hooks/client/useFetchUserInfo";
 import { Form, Formik } from "formik";
 
 const ChangeEmailForm = () => {
+  const { data: userInfo } = useFetchUserInfo();
+
   const initialEmail = {
-    email: "",
+    email: userInfo?.email || "",
   };
 
   return (
