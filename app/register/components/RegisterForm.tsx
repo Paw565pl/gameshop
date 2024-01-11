@@ -1,6 +1,7 @@
 "use client";
 
 import FormInput from "@/app/components/common/FormInput";
+import FormSubmitButton from "@/app/components/common/FormSubmitButton";
 import Toast, { ToastProps } from "@/app/components/common/Toast";
 import useRegisterUser from "@/app/hooks/client/useRegisterUser";
 import registerUserSchema, {
@@ -66,9 +67,7 @@ const RegisterForm = () => {
           <FormInput labelText="Username" name="username" type="text" />
           <FormInput labelText="E-mail" name="email" type="text" />
           <FormInput labelText="Password" name="password" type="password" />
-          <button type="submit" className="btn btn-block mt-3 rounded text-lg">
-            Sign In
-          </button>
+          <FormSubmitButton>Sign In</FormSubmitButton>
         </Form>
       </Formik>
       <p className="mt-2 text-center text-xs">

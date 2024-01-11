@@ -1,6 +1,7 @@
 "use client";
 
 import FormInput from "@/app/components/common/FormInput";
+import FormSubmitButton from "@/app/components/common/FormSubmitButton";
 import Toast, { ToastProps } from "@/app/components/common/Toast";
 import useLoginUser from "@/app/hooks/client/useLoginUser";
 import loginUserSchema, {
@@ -51,9 +52,7 @@ const LoginForm = () => {
         <Form className="mx-auto sm:w-2/3">
           <FormInput labelText="Username" name="username" type="text" />
           <FormInput labelText="Password" name="password" type="password" />
-          <button type="submit" className="btn btn-block mt-3 rounded text-lg">
-            Log In
-          </button>
+          <FormSubmitButton>Log In</FormSubmitButton>
         </Form>
       </Formik>
       <p className="mt-2 text-center text-xs">
