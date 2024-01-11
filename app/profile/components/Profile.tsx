@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { FaAddressCard, FaHeart, FaHistory } from "react-icons/fa";
+import { FaAddressCard, FaHeart, FaHistory, FaKey } from "react-icons/fa";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { MdReportProblem } from "react-icons/md";
 import Address from "./Address";
+import ChangePassword from "./ChangePassword";
 import ChoiceButton from "./ChoiceButton";
 import Favourites from "./Favourites";
 import OrdersHistory from "./OrdersHistory";
@@ -13,6 +14,7 @@ import SupportTickets from "./SupportTickets";
 
 enum activeComponentEnum {
   personal,
+  changePassword,
   address,
   favourites,
   ordersHistory,
@@ -21,6 +23,7 @@ enum activeComponentEnum {
 
 const components = {
   [activeComponentEnum.personal]: <Personal />,
+  [activeComponentEnum.changePassword]: <ChangePassword />,
   [activeComponentEnum.address]: <Address />,
   [activeComponentEnum.favourites]: <Favourites />,
   [activeComponentEnum.ordersHistory]: <OrdersHistory />,
@@ -40,6 +43,13 @@ const Profile = () => {
           icon={<FaAddressCard className="text-xl" />}
           handleClick={() => {
             setActiveComponent(activeComponentEnum.personal);
+          }}
+        />
+        <ChoiceButton
+          title="Change password"
+          icon={<FaKey className="text-xl" />}
+          handleClick={() => {
+            setActiveComponent(activeComponentEnum.changePassword);
           }}
         />
         <ChoiceButton
