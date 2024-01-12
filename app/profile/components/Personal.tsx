@@ -16,7 +16,7 @@ const Personal = () => {
 
   if (isLoading) return <p>Loading...</p>;
 
-  const initialValues = {
+  const initialValues: RegisterUserValues = {
     username: userInfo?.username || "",
     email: userInfo?.email || "",
     password: "",
