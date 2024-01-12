@@ -23,6 +23,7 @@ from .utils import check_if_game_exists
 # Create your views here.
 class GenreViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Genre.objects.all().order_by("id")
+    search_fields = ["name"]
 
     def get_serializer_class(self):
         if self.action == "retrieve":  # noqa
@@ -32,6 +33,7 @@ class GenreViewSet(viewsets.ReadOnlyModelViewSet):
 
 class PlatformViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Platform.objects.all().order_by("id")
+    search_fields = ["name"]
 
     def get_serializer_class(self):
         if self.action == "retrieve":  # noqa
@@ -41,6 +43,7 @@ class PlatformViewSet(viewsets.ReadOnlyModelViewSet):
 
 class DeveloperViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Developer.objects.all().order_by("id")
+    search_fields = ["name"]
 
     def get_serializer_class(self):
         if self.action == "retrieve":  # noqa
