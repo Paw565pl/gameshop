@@ -11,8 +11,7 @@ export const fetchIsGameFavourite = cache(async (id: number) => {
   return status === 200 ? true : false;
 });
 
-const usefetchIsGameFavourite = (id: number) =>
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+const useFetchIsGameFavourite = (id: number) =>
   useQuery<boolean, AxiosError>({
     queryKey: ["game", id, "is-favourite"],
     queryFn: () => fetchIsGameFavourite(id),
@@ -20,4 +19,4 @@ const usefetchIsGameFavourite = (id: number) =>
     retry: false,
   });
 
-export default usefetchIsGameFavourite;
+export default useFetchIsGameFavourite;
