@@ -11,7 +11,7 @@ interface ChoiceButtonProps {
 const ChoiceButton = ({ title, icon, handleClick }: ChoiceButtonProps) => {
   return (
     <button
-      className="btn btn-outline btn-lg btn-block rounded-none border-none text-lg font-medium"
+      className="btn btn-outline btn-lg btn-block h-min rounded-none border-none py-4 text-lg font-medium"
       onClick={handleClick}
     >
       {icon}

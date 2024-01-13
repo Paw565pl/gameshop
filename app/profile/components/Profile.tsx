@@ -36,8 +36,8 @@ const Profile = () => {
   );
 
   return (
-    <div className="mx-auto flex gap-4">
-      <div className="w-1/3">
+    <div className="mx-auto flex gap-2 sm:gap-4">
+      <div className="w-1/4 sm:w-1/3">
         <ChoiceButton
           title="Personal"
           icon={<FaAddressCard className="text-xl" />}
