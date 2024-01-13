@@ -16,7 +16,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
   useLayoutEffect(() => {
     if (!isAuthenticated) {
-      router.push("/login?returnUrl=" + pathname);
+      router.replace("/login?returnUrl=" + pathname);
     } else {
       setLoading(false);
     }

@@ -29,7 +29,7 @@ const RegisterForm = () => {
   useLayoutEffect(() => {
     const returnUrl = serchParams.get("returnUrl");
 
-    if (isAuthenticated) router.push(returnUrl ? returnUrl : "/");
+    if (isAuthenticated) router.replace(returnUrl ? returnUrl : "/");
   }, [isAuthenticated, router, serchParams]);
 
   const handleSubmit = (formValues: RegisterUserValues) => {

@@ -27,7 +27,7 @@ const useLoginUser = () => {
       loginUser(authTokens);
 
       const returnUrl = searchParams.get("returnUrl");
-      router.push(returnUrl || "/");
+      router.replace(returnUrl || "/");
     },
   });
 };
