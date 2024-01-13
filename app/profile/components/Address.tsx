@@ -1,24 +1,41 @@
 import FormInput from "@/app/components/common/FormInput";
 import FormSubmitButton from "@/app/components/common/FormSubmitButton";
 import Toast, { ToastProps } from "@/app/components/common/Toast";
+import useCreateOrUpdateUserAddress from "@/app/hooks/client/useCreateOrUpdateUserAddress";
+import useFetchUserAddress from "@/app/hooks/client/useFetchUserAddress";
 import addressSchema, { AddressValues } from "@/app/schemas/addressSchema";
 import { Form, Formik } from "formik";
 import { useState } from "react";
 
 const Address = () => {
   const [toast, setToast] = useState<ToastProps | null>(null);
+  const { data: userAddress, isLoading } = useFetchUserAddress();
+  const { mutate: createOrUpdateUserAddress } = useCreateOrUpdateUserAddress();
+
+  if (isLoading) return <p>Loading...</p>;
 
   const initialValues: AddressValues = {
-    first_name: "",
-    last_name: "",
-    phone_number: "",
-    street: "",
-    street_number: "",
-    flat_number: "",
-    city: "",
-    post_code: "",
-    state: "",
-    country: "",
+    first_name: userAddress?.first_name || "",
+    last_name: userAddress?.last_name || "",
+    phone_number: userAddress?.phone_number || "",
+    street: userAddress?.street || "",
+    street_number: userAddress?.street_number || "",
+    flat_number: userAddress?.flat_number || "",
+    city: userAddress?.city || "",
+    post_code: userAddress?.post_code || "",
+    state: userAddress?.state || "",
+    country: userAddress?.country || "",
+  };
+
+  const handleSubmit = (formValues: AddressValues) => {
+    createOrUpdateUserAddress(formValues, {
+      onSuccess: () =>
+        setToast({ variant: "success", children: "Address saved." }),
+      onError: () =>
+        setToast({ variant: "error", children: "Something went wrong." }),
+    });
+
+    setTimeout(() => setToast(null), 5000);
   };
 
   return (
@@ -27,7 +44,7 @@ const Address = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={addressSchema}
-        onSubmit={() => {}}
+        onSubmit={handleSubmit}
       >
         <Form>
           <FormInput labelText="First name" name="first_name" type="text" />
