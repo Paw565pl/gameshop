@@ -4,7 +4,7 @@ import { AuthContext } from "@/app/contexts/AuthContextProvider";
 import useAddFavouriteGame from "@/app/hooks/client/useAddFavouriteGame";
 import useDeleteFavouriteGame from "@/app/hooks/client/useDeleteFavouriteGame";
 import useFetchIsGameFavourite from "@/app/hooks/client/useFetchIsGameFavourite";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoHeart } from "react-icons/io5";
 
@@ -18,6 +18,10 @@ const FavouriteButton = ({ id }: FavouriteButtonProps) => {
   const { mutate: addFavouriteGame } = useAddFavouriteGame(id);
   const { mutate: deleteFavouriteGame } = useDeleteFavouriteGame(id);
   const [isLiked, setIsLiked] = useState<boolean>(isFavourite || false);
+
+  useEffect(() => {
+    setIsLiked(isFavourite || false);
+  }, [isFavourite]);
 
   if (!isAuthenticated)
     return (
