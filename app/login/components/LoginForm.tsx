@@ -3,13 +3,15 @@
 import FormInput from "@/app/components/common/FormInput";
 import FormSubmitButton from "@/app/components/common/FormSubmitButton";
 import Toast, { ToastProps } from "@/app/components/common/Toast";
+import { AuthContext } from "@/app/contexts/AuthContextProvider";
 import useLoginUser from "@/app/hooks/client/useLoginUser";
 import loginUserSchema, {
   LoginUserValues,
 } from "@/app/schemas/loginUserSchema";
 import { Form, Formik } from "formik";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useContext, useLayoutEffect, useState } from "react";
 
 const initialValues: LoginUserValues = {
   username: "",
@@ -17,8 +19,17 @@ const initialValues: LoginUserValues = {
 };
 
 const LoginForm = () => {
+  const { isAuthenticated } = useContext(AuthContext);
   const [toast, setToast] = useState<ToastProps | null>(null);
   const { mutate: loginUser } = useLoginUser();
+  const router = useRouter();
+  const serchParams = useSearchParams();
+
+  useLayoutEffect(() => {
+    const returnUrl = serchParams.get("returnUrl");
+
+    if (isAuthenticated) router.push(returnUrl ? returnUrl : "/");
+  }, [isAuthenticated, router, serchParams]);
 
   const handleSubmit = (formValues: LoginUserValues) => {
     loginUser(formValues, {
