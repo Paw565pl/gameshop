@@ -9,7 +9,7 @@ const postFavouriteGame = async (id: number) => {
 
 const useAddFavouriteGame = (id: number) =>
   useMutation<AxiosResponse, AxiosError>({
-    mutationKey: ["game", id, "is-favourite"],
+    mutationKey: ["favouriteGames"],
     mutationFn: () => postFavouriteGame(id),
   });
 
