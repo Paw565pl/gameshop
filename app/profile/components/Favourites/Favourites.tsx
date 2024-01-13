@@ -23,6 +23,10 @@ const Favourites = () => {
 
   if (isError) return <div>Something went wrong!</div>;
 
+  if (fetchedFavouriteGamesCount === 0) {
+    return <div>No favourites yet.</div>;
+  }
+
   return (
     <InfiniteScroll
       dataLength={fetchedFavouriteGamesCount || 0}
