@@ -5,7 +5,7 @@ import AuthTokens from "../entities/AuthTokens";
 
 interface AuthContext {
   isAuthenticated: boolean;
-  loginUser: (authTokens: AuthTokens, username: string) => void;
+  loginUser: (authTokens: AuthTokens) => void;
   logoutUser: () => void;
 }
 

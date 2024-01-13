@@ -23,12 +23,9 @@ const useLoginUser = () => {
   return useMutation<AuthTokens, AxiosError, LoginUserValues>({
     mutationKey: ["loginUser"],
     mutationFn: postLoginData,
-    onSuccess: (data, values) => {
-      const { access, refresh } = data;
-      const { username } = values;
+    onSuccess: (authTokens) => {
+      loginUser(authTokens);
 
-      loginUser({ access, refresh }, username);
-      // TODO: eliminacja username z localStorage
       const returnUrl = searchParams.get("returnUrl");
       router.push(returnUrl || "/");
     },
