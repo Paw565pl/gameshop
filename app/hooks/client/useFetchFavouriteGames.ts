@@ -3,6 +3,7 @@ import PaginatedResponse from "@/app/entities/PaginatedResponse";
 import authService from "@/app/services/authService";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import ms from "ms";
 
 const fetchFavouriteGames = async (pageNumber: unknown) => {
   const { data } = await authService.get<PaginatedResponse<Game>>(
@@ -29,6 +30,7 @@ const useFetchFavouriteGames = () =>
       return undefined;
     },
     initialPageParam: 1,
+    staleTime: ms("1h"),
   });
 
 export default useFetchFavouriteGames;

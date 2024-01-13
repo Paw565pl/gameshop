@@ -3,7 +3,6 @@ import Review from "@/app/entities/Review";
 import apiService from "@/app/services/apiService";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import ms from "ms";
 import { cache } from "react";
 
 export const revalidate = 1 * 60; // 1 minute
@@ -35,7 +34,6 @@ const useFetchGameReviews = (gameId: number) =>
       return undefined;
     },
     initialPageParam: 1,
-    staleTime: ms("1m"),
   });
 
 export default useFetchGameReviews;
