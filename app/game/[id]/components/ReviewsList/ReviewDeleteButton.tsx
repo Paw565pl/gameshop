@@ -2,6 +2,7 @@
 
 import { AuthContext } from "@/app/contexts/AuthContextProvider";
 import useDeleteGameReview from "@/app/hooks/client/useDeleteGameReview";
+import useFetchUserInfo from "@/app/hooks/client/useFetchUserInfo";
 import { useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 
@@ -16,11 +17,12 @@ const ReviewDeleteButton = ({
   gameId,
   reviewId,
 }: ReviewButtonsProps) => {
-  const { isAuthenticated, getUser } = useContext(AuthContext);
-  const username = getUser();
+  const { isAuthenticated } = useContext(AuthContext);
   const { mutate: deleteReview } = useDeleteGameReview(gameId, reviewId);
+  const { data: userInfo } = useFetchUserInfo();
+  const currentUsername = userInfo?.username;
 
-  if (!isAuthenticated || author !== username) return null;
+  if (!isAuthenticated || author !== currentUsername) return null;
 
   return (
     <div className="card-actions justify-end">

@@ -7,7 +7,6 @@ interface AuthContext {
   isAuthenticated: boolean;
   loginUser: (authTokens: AuthTokens, username: string) => void;
   logoutUser: () => void;
-  getUser: () => string | null;
 }
 
 interface AuthContextProviderProps {
@@ -22,16 +21,14 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   useEffect(() => {
     const hasTokens =
       !!localStorage.getItem("access-token") &&
-      !!localStorage.getItem("refresh-token") &&
-      !!localStorage.getItem("username");
+      !!localStorage.getItem("refresh-token");
 
     setIsAuthenticated(hasTokens);
   }, []);
 
-  const loginUser = (authTokens: AuthTokens, username: string) => {
+  const loginUser = (authTokens: AuthTokens) => {
     localStorage.setItem("access-token", authTokens.access);
     localStorage.setItem("refresh-token", authTokens.refresh);
-    localStorage.setItem("username", username);
 
     setIsAuthenticated(true);
   };
@@ -39,24 +36,12 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const logoutUser = () => {
     localStorage.removeItem("access-token");
     localStorage.removeItem("refresh-token");
-    localStorage.removeItem("username");
 
     setIsAuthenticated(false);
   };
 
-  const getUser = () => {
-    try {
-      const username = localStorage.getItem("username");
-      return username;
-    } catch (error) {
-      return "";
-    }
-  };
-
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, loginUser, logoutUser, getUser }}
-    >
+    <AuthContext.Provider value={{ isAuthenticated, loginUser, logoutUser }}>
       {children}
     </AuthContext.Provider>
   );

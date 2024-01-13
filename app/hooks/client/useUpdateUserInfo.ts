@@ -2,12 +2,15 @@ import { RegisterUserValues } from "@/app/schemas/registerUserSchema";
 import authService from "@/app/services/authService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
+import useFetchUserInfo from "./useFetchUserInfo";
 
-const updateUserInfo = async (data: RegisterUserValues) => {
+const updateUserInfo = async (
+  data: RegisterUserValues,
+  currentUsername: string | undefined,
+) => {
   const { username, email, password } = data;
 
-  const savedUsername = localStorage.getItem("username");
-  if (username !== savedUsername) {
+  if (username !== currentUsername) {
     const usernameResponse = await authService.post(
       "/auth/users/set_username/",
       {
@@ -17,7 +20,6 @@ const updateUserInfo = async (data: RegisterUserValues) => {
     );
     if (usernameResponse.status !== 204)
       return Promise.reject(usernameResponse);
-    localStorage.setItem("username", username);
   }
 
   const emailResponse = await authService.put("/auth/users/me/", { email });
@@ -25,12 +27,14 @@ const updateUserInfo = async (data: RegisterUserValues) => {
 };
 
 const useUpdateUserInfo = () => {
-  const queryClient = useQueryClient();
   const key = ["userInfo"];
+  const queryClient = useQueryClient();
+  const { data: userInfo } = useFetchUserInfo();
+  const currentUsername = userInfo?.username;
 
   return useMutation<AxiosResponse, AxiosError, RegisterUserValues>({
     mutationKey: key,
-    mutationFn: updateUserInfo,
+    mutationFn: (data) => updateUserInfo(data, currentUsername),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: key }),
   });
 };

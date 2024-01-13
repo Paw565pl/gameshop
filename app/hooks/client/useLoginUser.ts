@@ -28,7 +28,7 @@ const useLoginUser = () => {
       const { username } = values;
 
       loginUser({ access, refresh }, username);
-
+      // TODO: eliminacja username z localStorage
       const returnUrl = searchParams.get("returnUrl");
       router.push(returnUrl || "/");
     },
