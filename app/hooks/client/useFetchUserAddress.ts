@@ -11,7 +11,7 @@ const fetchUserAddress = async () => {
   } = await authService.get<PaginatedResponse<Address>>("/addresses");
 
   if (results.length === 0) {
-    return undefined;
+    return null;
   }
 
   const address = results[0];
@@ -19,7 +19,7 @@ const fetchUserAddress = async () => {
 };
 
 const useFetchUserAddress = () =>
-  useQuery<Address | undefined, AxiosError>({
+  useQuery<Address | null, AxiosError>({
     queryKey: ["userAddress"],
     queryFn: fetchUserAddress,
     staleTime: ms("1h"),
