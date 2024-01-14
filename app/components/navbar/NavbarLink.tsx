@@ -11,7 +11,7 @@ const NavbarLink = ({ title, icon, href }: NavbarLinkProps) => {
   return (
     <Link href={href} className="flex items-center gap-1 hover:text-gray-600">
       {icon ? icon : null}
-      <span>{title}</span>
+      <span className="hidden sm:inline">{title}</span>
     </Link>
   );
 };
