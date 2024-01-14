@@ -4,7 +4,7 @@ import NavbarLink from "./NavbarLink";
 
 const UserPanel = () => {
   return (
-    <>
+    <div className="flex items-center gap-2">
       <NavbarLink
         title="Cart"
         icon={<FaShoppingCart className="text-2xl" />}
@@ -16,7 +16,7 @@ const UserPanel = () => {
         href={"/profile"}
       />
       <LogoutButton />
-    </>
+    </div>
   );
 };
 

@@ -3,7 +3,7 @@ import NavbarLink from "./NavbarLink";
 
 const AuthPanel = () => {
   return (
-    <>
+    <div className="flex items-center gap-2">
       <NavbarLink
         title="Login"
         icon={<RiDoorLockFill className="text-2xl" />}
@@ -14,7 +14,7 @@ const AuthPanel = () => {
         icon={<RiHealthBookFill className="text-2xl" />}
         href="/register"
       />
-    </>
+    </div>
   );
 };
 

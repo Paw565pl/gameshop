@@ -7,16 +7,14 @@ import UserPanel from "./UserPanel";
 
 const Navbar = () => {
   return (
-    <nav className="flex items-center justify-between py-2">
+    <nav className="flex items-center justify-between gap-4 py-2">
       <Logo />
       <SearchBar />
-      <div className="flex items-center gap-2">
-        <ConditionalComponent
-          authenticatedComponent={<UserPanel />}
-          anonymousComponent={<AuthPanel />}
-        />
-        <ThemeSwitch />
-      </div>
+      <ConditionalComponent
+        authenticatedComponent={<UserPanel />}
+        anonymousComponent={<AuthPanel />}
+      />
+      <ThemeSwitch />
     </nav>
   );
 };

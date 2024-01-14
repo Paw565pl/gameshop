@@ -16,7 +16,7 @@ const SearchBar = () => {
   }, 300);
 
   return (
-    <search className="relative mx-6 flex w-full items-center">
+    <search className="relative flex w-full items-center">
       <GoSearch
         className="absolute left-2 cursor-pointer text-3xl"
         onClick={() => searchInput.current?.focus()}
