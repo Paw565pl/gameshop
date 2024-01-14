@@ -31,7 +31,7 @@ const GameCardGrid = () => {
         hasMore={hasNextPage}
         next={fetchNextPage}
         loader={<GameCardSkeleton />}
-        className="space-y-4 px-2 py-4"
+        className="space-y-4 px-2 pb-4"
       >
         {isFetching &&
           skeletons.map((_, index) => <GameCardSkeleton key={index} />)}
