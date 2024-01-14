@@ -3,16 +3,19 @@
 import { actions } from "@/app/redux/gameQuerySlice";
 import { useAppDispatch } from "@/app/redux/hooks";
 import debounce from "just-debounce-it";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useRef } from "react";
 import { GoSearch } from "react-icons/go";
 
 const SearchBar = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const searchInput = useRef<HTMLInputElement>(null);
 
   const handleChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     dispatch(actions.setName(value));
+    router.push("/");
   }, 300);
 
   return (
