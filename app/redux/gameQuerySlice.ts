@@ -25,7 +25,7 @@ interface GameQueryState {
   ordering: Ordering;
 }
 
-const initialState: GameQueryState = {
+export const initialGameQuery: GameQueryState = {
   name: "",
   min_release_year: "",
   max_release_year: "",
@@ -41,10 +41,10 @@ const initialState: GameQueryState = {
 
 const gameQuerySlice = createSlice({
   name: "gameQuery",
-  initialState,
+  initialState: initialGameQuery,
   reducers: {
     setName: (_, action) => {
-      return { ...initialState, name: action.payload };
+      return { ...initialGameQuery, name: action.payload };
     },
     setMinReleaseYear: (state, action) => {
       state.min_release_year = action.payload;
