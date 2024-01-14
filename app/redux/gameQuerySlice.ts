@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type Ordering =
+export type OrderValue =
   | ""
   | "name"
   | "-name"
@@ -22,7 +22,7 @@ interface GameQueryState {
   genre: string;
   platform: string;
   developer: string;
-  ordering: Ordering;
+  ordering: OrderValue;
 }
 
 export const initialGameQuery: GameQueryState = {

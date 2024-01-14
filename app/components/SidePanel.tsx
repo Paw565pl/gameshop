@@ -4,6 +4,7 @@ import useFetchGenres from "../hooks/client/useFetchGenres";
 import useFetchPlatforms from "../hooks/client/useFetchPlatforms";
 import { actions } from "../redux/gameQuerySlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import SortSelector from "./SortSelector";
 import RadioFilter from "./filters/RadioFilter";
 import RangeFilter from "./filters/RangeFilter";
 
@@ -38,7 +39,7 @@ const SidePanel = () => {
 
   return (
     <aside className="hidden w-1/6 sm:block">
-      <h3 className="mb-6 text-center">Filters</h3>
+      <SortSelector />
       <RangeFilter
         title="Price"
         min={0}
