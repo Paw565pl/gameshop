@@ -1,7 +1,7 @@
 "use client";
 
 import { Field, Form, Formik } from "formik";
-import { InferType, number, object } from "yup";
+import { number, object } from "yup";
 
 interface RangeFilterProps {
   title: string;
@@ -35,18 +35,18 @@ const RangeFilter = ({
       .max(max, `input must be lesser than ${max}`),
   });
 
-  type RangeFilterValues = InferType<typeof validationSchema>;
-
   const initialValues = {
-    minValue: currentMin ? parseInt(currentMin) : undefined,
-    maxValue: currentMax ? parseInt(currentMax) : undefined,
+    minValue: currentMin,
+    maxValue: currentMax,
   };
+
+  type RangeFilterValues = typeof initialValues;
 
   const handleSubmit = (formValues: RangeFilterValues) => {
     const { minValue, maxValue } = formValues;
 
-    handleMinChange(minValue?.toString() || "");
-    handleMaxChange(maxValue?.toString() || "");
+    handleMinChange(minValue);
+    handleMaxChange(maxValue);
   };
 
   return (
