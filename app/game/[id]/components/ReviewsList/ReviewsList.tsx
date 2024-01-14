@@ -29,6 +29,10 @@ const ReviewsList = ({ gameId }: ReviewsListProps) => {
 
   if (isError) return <div>Something went wrong!</div>;
 
+  if (fetchedGameReviewsCount === 0) {
+    return <div>No reviews yet.</div>;
+  }
+
   return (
     <section>
       <InfiniteScroll
