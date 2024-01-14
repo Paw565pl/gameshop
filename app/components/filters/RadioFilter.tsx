@@ -1,23 +1,32 @@
 "use client";
 
+import PaginatedResponse from "@/app/entities/PaginatedResponse";
 import { actions } from "@/app/redux/gameQuerySlice";
 import { useAppDispatch } from "@/app/redux/hooks";
-import { ChangeEvent } from "react";
+import { InfiniteData } from "@tanstack/react-query";
+import { ChangeEvent, useMemo } from "react";
 
 interface Item {
   id: number;
   name: string;
   slug: string;
-  background_image: string;
 }
 
 interface SelectFilterProps {
   title: string;
-  items: Item[];
+  selected: string;
+  data: InfiniteData<PaginatedResponse<Item>> | undefined;
+  fetchNextPage: () => void;
   onChange: (value: string) => void;
 }
-// TODO: show more button downloads next pages from api
-const RadioFilter = ({ title, items }: SelectFilterProps) => {
+
+const RadioFilter = ({
+  title,
+  selected,
+  data,
+  fetchNextPage,
+  onChange,
+}: SelectFilterProps) => {
   const dispatch = useAppDispatch();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,10 +34,28 @@ const RadioFilter = ({ title, items }: SelectFilterProps) => {
     dispatch(actions.setGenre(value));
   };
 
+  const items = useMemo(
+    () => data?.pages.flatMap((page) => page.results),
+    [data],
+  );
+
   return (
     <div className="mb-4 flex flex-col justify-center">
       <h4 className="mb-1 text-center text-sm">{title}</h4>
-      {items.map((item) => (
+      <div className="form-control">
+        <label className="label cursor-pointer justify-normal text-xs">
+          <input
+            type="radio"
+            name={title}
+            value=""
+            className="radio radio-xs checked:bg-accent"
+            onChange={handleChange}
+            checked={selected === ""}
+          />
+          <span className="label-text ml-1">All</span>
+        </label>
+      </div>
+      {items?.map((item) => (
         <div key={item.id} className="form-control">
           <label className="label cursor-pointer justify-normal text-xs">
             <input
@@ -37,12 +64,15 @@ const RadioFilter = ({ title, items }: SelectFilterProps) => {
               value={item.slug}
               className="radio radio-xs checked:bg-accent"
               onChange={handleChange}
+              checked={selected === item.slug}
             />
             <span className="label-text ml-1">{item.name}</span>
           </label>
         </div>
       ))}
-      <button className="btn btn-ghost btn-xs">Show more</button>
+      <button className="btn btn-ghost btn-xs" onClick={fetchNextPage}>
+        Show more
+      </button>
     </div>
   );
 };
