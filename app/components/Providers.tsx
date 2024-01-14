@@ -4,7 +4,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ms from "ms";
 import { ReactNode, useState } from "react";
+import { Provider as ReduxProvider } from "react-redux";
 import AuthContextProvider from "../contexts/AuthContextProvider";
+import store from "../redux/store";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -24,7 +26,9 @@ const Providers = ({ children }: ProvidersProps) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>{children}</AuthContextProvider>
+      <ReduxProvider store={store}>
+        <AuthContextProvider>{children}</AuthContextProvider>
+      </ReduxProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
