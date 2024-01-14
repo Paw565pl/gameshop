@@ -18,11 +18,11 @@ class GameFilter(filters.FilterSet):
     max_price = filters.NumberFilter(field_name="price", lookup_expr="lte")
 
     genre = filters.CharFilter(
-        label="Genre name", field_name="genres__name", lookup_expr="iexact"
+        label="Genre slug", field_name="genres__slug", lookup_expr="iexact"
     )
     platform = filters.CharFilter(
-        label="Platform name", field_name="platforms__name", lookup_expr="iexact"
+        label="Platform slug", field_name="platforms__slug", lookup_expr="iexact"
     )
     developer = filters.CharFilter(
-        label="Developer name", field_name="developers__name", lookup_expr="iexact"
+        label="Developer slug", field_name="developers__slug", lookup_expr="iexact"
     )
