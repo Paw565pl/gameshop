@@ -13,7 +13,7 @@ interface GameCardProps {
 
 const GameCard = ({ game }: GameCardProps) => {
   return (
-    <div className="card bg-base-100 shadow-xl md:card-side">
+    <div className="card bg-base-100 shadow-lg md:card-side">
       <GameCardImage
         src={game.background_image}
         name={game.name}
