@@ -1,5 +1,9 @@
 "use client";
 
+import { actions } from "@/app/redux/gameQuerySlice";
+import { useAppDispatch } from "@/app/redux/hooks";
+import { ChangeEvent } from "react";
+
 interface Item {
   id: number;
   name: string;
@@ -14,6 +18,13 @@ interface SelectFilterProps {
 }
 // TODO: show more button downloads next pages from api
 const RadioFilter = ({ title, items }: SelectFilterProps) => {
+  const dispatch = useAppDispatch();
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    dispatch(actions.setGenre(value));
+  };
+
   return (
     <div className="mb-4 flex flex-col justify-center">
       <h4 className="mb-1 text-center text-sm">{title}</h4>
@@ -25,7 +36,7 @@ const RadioFilter = ({ title, items }: SelectFilterProps) => {
               name={title}
               value={item.slug}
               className="radio radio-xs checked:bg-accent"
-              onChange={(e) => console.log(e.currentTarget.value)}
+              onChange={handleChange}
             />
             <span className="label-text ml-1">{item.name}</span>
           </label>
