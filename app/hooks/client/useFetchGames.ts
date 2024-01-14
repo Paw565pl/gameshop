@@ -5,6 +5,7 @@ import { cache } from "react";
 import Game from "../../entities/Game";
 import PaginatedResponse from "../../entities/PaginatedResponse";
 import apiService from "../../services/apiService";
+import { useAppSelector } from "@/app/redux/hooks";
 
 export const revalidate = 10 * 60; // 10 minutes
 
@@ -16,10 +17,13 @@ export const fetchGames = cache(async (requestConfig?: AxiosRequestConfig) => {
   return data;
 });
 
-const useFetchGames = () =>
-  useInfiniteQuery<PaginatedResponse<Game>, AxiosError>({
-    queryKey: ["games"],
-    queryFn: ({ pageParam }) => fetchGames({ params: { page: pageParam } }),
+const useFetchGames = () => {
+  const gameQuery = useAppSelector((s) => s.gameQuery);
+
+  return useInfiniteQuery<PaginatedResponse<Game>, AxiosError>({
+    queryKey: ["games", gameQuery],
+    queryFn: ({ pageParam }) =>
+      fetchGames({ params: { page: pageParam, ...gameQuery } }),
     getNextPageParam: (lastPage) => {
       if (lastPage.next) {
         const url = new URL(lastPage.next);
@@ -31,5 +35,6 @@ const useFetchGames = () =>
     initialPageParam: 1,
     staleTime: ms("10m"),
   });
+};
 
 export default useFetchGames;
