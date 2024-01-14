@@ -20,6 +20,20 @@ const SideFilters = () => {
   const currentMinPrice = useAppSelector((s) => s.gameQuery.min_price);
   const currentMaxPrice = useAppSelector((s) => s.gameQuery.max_price);
 
+  const currentMinMetacritic = useAppSelector(
+    (s) => s.gameQuery.min_metacritic,
+  );
+  const currentMaxMetacritic = useAppSelector(
+    (s) => s.gameQuery.max_metacritic,
+  );
+
+  const currentMinReleaseYear = useAppSelector(
+    (s) => s.gameQuery.min_release_year,
+  );
+  const currentMaxReleaseYear = useAppSelector(
+    (s) => s.gameQuery.max_release_year,
+  );
+
   const currentYear = new Date().getFullYear();
 
   return (
@@ -33,6 +47,24 @@ const SideFilters = () => {
         currentMax={currentMaxPrice}
         handleMinChange={(value) => dispatch(actions.setMinPrice(value))}
         handleMaxChange={(value) => dispatch(actions.setMaxPrice(value))}
+      />
+      <RangeFilter
+        title="Metacritic"
+        min={0}
+        max={100}
+        currentMin={currentMinMetacritic}
+        currentMax={currentMaxMetacritic}
+        handleMinChange={(value) => dispatch(actions.setMinMetacritic(value))}
+        handleMaxChange={(value) => dispatch(actions.setMaxMetacritic(value))}
+      />
+      <RangeFilter
+        title="Release year"
+        min={1970}
+        max={currentYear}
+        currentMin={currentMinReleaseYear}
+        currentMax={currentMaxReleaseYear}
+        handleMinChange={(value) => dispatch(actions.setMinReleaseYear(value))}
+        handleMaxChange={(value) => dispatch(actions.setMaxReleaseYear(value))}
       />
       <RadioFilter
         title="Genre"
