@@ -1,21 +1,27 @@
 "use client";
 
 import { Field, Form, Formik } from "formik";
-import { number, object } from "yup";
+import { InferType, number, object } from "yup";
 
 interface RangeFilterProps {
   title: string;
   min: number;
   max: number;
-  onChange: (min: number, max: number) => void;
+  currentMin: string;
+  currentMax: string;
+  handleMinChange: (value: string) => void;
+  handleMaxChange: (value: string) => void;
 }
 
-const initialValues = {
-  minValue: "",
-  maxValue: "",
-};
-
-const RangeFilter = ({ title, min, max, onChange }: RangeFilterProps) => {
+const RangeFilter = ({
+  title,
+  min,
+  max,
+  currentMin,
+  currentMax,
+  handleMinChange,
+  handleMaxChange,
+}: RangeFilterProps) => {
   const validationSchema = object({
     minValue: number()
       .typeError("input must be number")
@@ -29,13 +35,27 @@ const RangeFilter = ({ title, min, max, onChange }: RangeFilterProps) => {
       .max(max, `input must be lesser than ${max}`),
   });
 
+  type RangeFilterValues = InferType<typeof validationSchema>;
+
+  const initialValues = {
+    minValue: currentMin ? parseInt(currentMin) : undefined,
+    maxValue: currentMax ? parseInt(currentMax) : undefined,
+  };
+
+  const handleSubmit = (formValues: RangeFilterValues) => {
+    const { minValue, maxValue } = formValues;
+
+    handleMinChange(minValue?.toString() || "");
+    handleMaxChange(maxValue?.toString() || "");
+  };
+
   return (
     <div className="mb-4">
       <h4 className="mb-1 text-center text-sm">{title}</h4>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={() => {}}
+        onSubmit={handleSubmit}
       >
         {({ errors }) => (
           <Form>
@@ -57,6 +77,7 @@ const RangeFilter = ({ title, min, max, onChange }: RangeFilterProps) => {
             <div className="text-center text-xs text-error">
               {errors && Object.values(errors)[0]}
             </div>
+            <button type="submit" className="hidden"></button>
           </Form>
         )}
       </Formik>

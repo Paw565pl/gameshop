@@ -17,18 +17,22 @@ const SideFilters = () => {
   const selectedGenre = useAppSelector((s) => s.gameQuery.genre);
   const selectedPlatform = useAppSelector((s) => s.gameQuery.platform);
 
+  const currentMinPrice = useAppSelector((s) => s.gameQuery.min_price);
+  const currentMaxPrice = useAppSelector((s) => s.gameQuery.max_price);
+
   const currentYear = new Date().getFullYear();
 
   return (
     <aside className="hidden w-1/6 sm:block">
       <h3 className="mb-6 text-center">Filters</h3>
-      <RangeFilter title="Price" min={0} max={1000} onChange={() => {}} />
-      <RangeFilter title="Metacritic" min={0} max={100} onChange={() => {}} />
       <RangeFilter
-        title="Release Year"
-        min={1970}
-        max={currentYear}
-        onChange={() => {}}
+        title="Price"
+        min={0}
+        max={1000}
+        currentMin={currentMinPrice}
+        currentMax={currentMaxPrice}
+        handleMinChange={(value) => dispatch(actions.setMinPrice(value))}
+        handleMaxChange={(value) => dispatch(actions.setMaxPrice(value))}
       />
       <RadioFilter
         title="Genre"
