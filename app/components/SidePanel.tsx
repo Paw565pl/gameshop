@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import RadioFilter from "./filters/RadioFilter";
 import RangeFilter from "./filters/RangeFilter";
 
-const SideFilters = () => {
+const SidePanel = () => {
   const { data: genres, fetchNextPage: fetchMoreGenres } = useFetchGenres();
   const { data: platforms, fetchNextPage: fetchMorePlatforms } =
     useFetchPlatforms();
@@ -84,4 +84,4 @@ const SideFilters = () => {
   );
 };
 
-export default SideFilters;
+export default SidePanel;

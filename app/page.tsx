@@ -3,7 +3,7 @@ import {
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
-import SideFilters from "./components/SideFilters";
+import SidePanel from "./components/SidePanel";
 import GameCardGrid from "./components/gameCardGrid";
 import usePrefetchGames from "./hooks/server/usePrefetchGames";
 import usePrefetchGenres from "./hooks/server/usePrefetchGenres";
@@ -21,7 +21,7 @@ const RootPage = async () => {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex gap-10">
-        <SideFilters />
+        <SidePanel />
         <GameCardGrid />
       </div>
     </HydrationBoundary>
