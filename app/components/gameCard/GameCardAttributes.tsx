@@ -1,7 +1,7 @@
 interface GameCardAttributesProps {
   released: string | null;
-  mainDeveloper: string;
-  mainGenre: string;
+  mainDeveloper: string | undefined;
+  mainGenre: string | undefined;
 }
 
 const GameCardAttributes = ({
@@ -14,9 +14,9 @@ const GameCardAttributes = ({
       <dt>Release date:</dt>
       <dd>{released ? released : "N/A"}</dd>
       <dt>Main developer:</dt>
-      <dd>{mainDeveloper}</dd>
+      <dd>{mainDeveloper ? mainDeveloper : "N/A"}</dd>
       <dt>Main genre:</dt>
-      <dd>{mainGenre}</dd>
+      <dd>{mainGenre ? mainGenre : "N/A"}</dd>
     </dl>
   );
 };

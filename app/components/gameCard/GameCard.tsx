@@ -24,8 +24,8 @@ const GameCard = ({ game }: GameCardProps) => {
         <GameCardSecondaryTitle nameOriginal={game.name_original} />
         <GameCardAttributes
           released={game.released}
-          mainDeveloper={game.developers[0].name}
-          mainGenre={game.genres[0].name}
+          mainDeveloper={game.developers.at(0)?.name}
+          mainGenre={game.genres.at(0)?.name}
         />
         <GameCardPrice price={game.price} />
         <div className="card-actions justify-between">
