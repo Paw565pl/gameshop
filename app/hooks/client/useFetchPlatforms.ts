@@ -10,7 +10,7 @@ export const revalidate = 60 * 60; // 1 hour
 
 export const fetchPlatforms = cache(async (pageNumber: unknown) => {
   const { data } = await apiService.get<PaginatedResponse<Platform>>(
-    "/genres",
+    "/platforms",
     {
       params: {
         page: pageNumber,
