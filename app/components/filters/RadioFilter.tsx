@@ -1,10 +1,8 @@
 "use client";
 
 import PaginatedResponse from "@/app/entities/PaginatedResponse";
-import { actions } from "@/app/redux/gameQuerySlice";
-import { useAppDispatch } from "@/app/redux/hooks";
 import { InfiniteData } from "@tanstack/react-query";
-import { ChangeEvent, useMemo } from "react";
+import { useMemo } from "react";
 
 interface Item {
   id: number;
@@ -17,7 +15,7 @@ interface SelectFilterProps {
   selected: string;
   data: InfiniteData<PaginatedResponse<Item>> | undefined;
   fetchNextPage: () => void;
-  onChange: (value: string) => void;
+  handleChange: (value: string) => void;
 }
 
 const RadioFilter = ({
@@ -25,15 +23,8 @@ const RadioFilter = ({
   selected,
   data,
   fetchNextPage,
-  onChange,
+  handleChange,
 }: SelectFilterProps) => {
-  const dispatch = useAppDispatch();
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    dispatch(actions.setGenre(value));
-  };
-
   const items = useMemo(
     () => data?.pages.flatMap((page) => page.results),
     [data],
@@ -49,7 +40,7 @@ const RadioFilter = ({
             name={title}
             value=""
             className="radio radio-xs checked:bg-accent"
-            onChange={handleChange}
+            onChange={(e) => handleChange(e.target.value)}
             checked={selected === ""}
           />
           <span className="label-text ml-1">All</span>
@@ -63,7 +54,7 @@ const RadioFilter = ({
               name={title}
               value={item.slug}
               className="radio radio-xs checked:bg-accent"
-              onChange={handleChange}
+              onChange={(e) => handleChange(e.target.value)}
               checked={selected === item.slug}
             />
             <span className="label-text ml-1">{item.name}</span>

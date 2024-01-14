@@ -1,13 +1,18 @@
 "use client";
 
 import useFetchGenres from "../hooks/client/useFetchGenres";
-import { useAppSelector } from "../redux/hooks";
+import { actions } from "../redux/gameQuerySlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import RadioFilter from "./filters/RadioFilter";
 import RangeFilter from "./filters/RangeFilter";
 
 const SideFilters = () => {
   const { data: genres, fetchNextPage } = useFetchGenres();
+
+  const dispatch = useAppDispatch();
+
   const selectedGenre = useAppSelector((s) => s.gameQuery.genre);
+
   const currentYear = new Date().getFullYear();
 
   return (
@@ -25,8 +30,8 @@ const SideFilters = () => {
         title="Genre"
         selected={selectedGenre}
         data={genres}
-        onChange={() => {}}
         fetchNextPage={fetchNextPage}
+        handleChange={(value) => dispatch(actions.setGenre(value))}
       />
     </aside>
   );
