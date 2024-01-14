@@ -6,6 +6,8 @@ import { AxiosError } from "axios";
 import ms from "ms";
 import { cache } from "react";
 
+export const revalidate = 60 * 60; // 1 hour
+
 export const fetchPlatforms = cache(async (pageNumber: unknown) => {
   const { data } = await apiService.get<PaginatedResponse<Platform>>(
     "/genres",
