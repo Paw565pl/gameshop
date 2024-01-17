@@ -222,9 +222,28 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class SupportTicketMessageSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(read_only=True)
+
     class Meta:
         model = SupportTicketMessage
         fields = "__all__"
+
+    @transaction.atomic()
+    def create(self, validated_data):
+        username = self.context["request"].user.username
+        support_ticket_id = self.context["view"].kwargs["support_ticket_pk"]
+
+        try:
+            support_ticket = SupportTicket.objects.get(pk=support_ticket_id)
+        except SupportTicket.DoesNotExist:
+            raise serializers.ValidationError("Support ticket not found.")
+
+        new_message = SupportTicketMessage.objects.create(
+            author=username, **validated_data
+        )
+        support_ticket.messages.add(new_message)
+
+        return new_message
 
 
 class SupportTicketSerializer(serializers.ModelSerializer):
@@ -256,7 +275,7 @@ class SupportTicketSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid order id.")
 
         has_support_ticket_for_order = (
-                SupportTicket.objects.filter(order__id=order_id).count() != 0
+            SupportTicket.objects.filter(order__id=order_id).count() != 0
         )
         if has_support_ticket_for_order:
             raise serializers.ValidationError(

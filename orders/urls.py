@@ -14,4 +14,11 @@ router.register(
 cart_router = routers.NestedSimpleRouter(router, r"carts", lookup="cart")
 cart_router.register(r"items", views.CartItemViewSet, basename="cart-items")
 
-urlpatterns = router.urls + cart_router.urls
+support_tickets_router = routers.NestedSimpleRouter(
+    router, r"support-tickets", lookup="support_ticket"
+)
+support_tickets_router.register(
+    r"messages", views.SupportTicketMessageViewSet, basename="support-ticket-messages"
+)
+
+urlpatterns = router.urls + cart_router.urls + support_tickets_router.urls

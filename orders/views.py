@@ -1,12 +1,21 @@
 from rest_framework import viewsets, permissions, mixins
 
-from orders.models import Cart, Item, Order, Address, SupportTicket
+from games.utils import check_if_support_ticket_exists
+from orders.models import (
+    Cart,
+    Item,
+    Order,
+    Address,
+    SupportTicket,
+    SupportTicketMessage,
+)
 from orders.serializers import (
     CartSerializer,
     ItemSerializer,
     OrderSerializer,
     AddressSerializer,
     SupportTicketSerializer,
+    SupportTicketMessageSerializer,
 )
 from orders.utils import check_if_cart_exists
 
@@ -89,3 +98,20 @@ class SupportTicketViewSet(
         user_id = self.request.user.id
         support_tickets = SupportTicket.objects.filter(user__id=user_id).order_by("id")
         return support_tickets
+
+
+class SupportTicketMessageViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+):
+    serializer_class = SupportTicketMessageSerializer
+
+    def get_queryset(self):
+        cart_id = self.kwargs["support_ticket_pk"]
+
+        check_if_support_ticket_exists(cart_id)
+        return SupportTicketMessage.objects.filter(supportticket__id=cart_id).order_by(
+            "id"
+        )
