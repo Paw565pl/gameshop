@@ -77,10 +77,7 @@ class Order(models.Model):
     DELIVERY_INPOST = "INPOST"
     DELIVERY_DHL = "DHL"
 
-    DELIVERY_CHOICES = [
-        (DELIVERY_INPOST, "Inpost"),
-        (DELIVERY_DHL, "DHL")
-    ]
+    DELIVERY_CHOICES = [(DELIVERY_INPOST, "Inpost"), (DELIVERY_DHL, "DHL")]
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     items = models.ArrayReferenceField(to=Item)
