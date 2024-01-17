@@ -91,7 +91,7 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
     delivery_method = models.CharField(max_length=10, choices=DELIVERY_CHOICES)
 
-    address = models.ArrayReferenceField(to=Address)
+    address = models.ArrayReferenceField(to=Address, on_delete=models.PROTECT)
     total_price = Decimal128Field(max_digits=10, decimal_places=2)
 
     promo_code = models.CharField(max_length=20, null=True, blank=True)
