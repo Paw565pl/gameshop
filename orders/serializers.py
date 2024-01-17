@@ -151,7 +151,6 @@ class OrderSerializer(serializers.ModelSerializer):
     total_price = serializers.DecimalField(
         read_only=True, max_digits=10, decimal_places=2
     )
-    promo_code = serializers.CharField(allow_null=True, allow_blank=True)
 
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
@@ -255,7 +254,7 @@ class SupportTicketSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid order id.")
 
         has_support_ticket_for_order = (
-            SupportTicket.objects.filter(order__id=order_id).count() != 0
+                SupportTicket.objects.filter(order__id=order_id).count() != 0
         )
         if has_support_ticket_for_order:
             raise serializers.ValidationError(
