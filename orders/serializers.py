@@ -197,7 +197,7 @@ class OrderSerializer(serializers.ModelSerializer):
             total_price = str(round(Decimal(total_price) * Decimal(0.97), 2))
 
         cart.delete()
-        order = Order.objects.create(total_price=total_price, promo_code=promo_code)
+        order = Order.objects.create(total_price=total_price, **validated_data)
 
         order.items.add(*cart_items)
         order.address.add(address)
@@ -211,6 +211,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "id",
             "items",
             "status",
+            "payment_method",
+            "delivery_method",
             "address",
             "promo_code",
             "total_price",

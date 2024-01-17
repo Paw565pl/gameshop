@@ -66,11 +66,31 @@ class Order(models.Model):
         (ORDER_STATUS_COMPLETED, "Completed"),
     ]
 
+    PAYMENT_BLIK = "BLIK"
+    PAYMENT_PAYPAL = "PAYPAL"
+
+    PAYMENT_CHOICES = [
+        (PAYMENT_BLIK, ""),
+        (PAYMENT_PAYPAL, ""),
+    ]
+
+    DELIVERY_INPOST = "INPOST"
+    DELIVERY_DHL = "DHL"
+
+    DELIVERY_CHOICES = [
+        (DELIVERY_INPOST, "Inpost"),
+        (DELIVERY_DHL, "DHL")
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     items = models.ArrayReferenceField(to=Item)
+
     status = models.CharField(
         max_length=10, choices=ORDER_STATUS_CHOICES, default=ORDER_STATUS_PENDING
     )
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
+    delivery_method = models.CharField(max_length=10, choices=DELIVERY_CHOICES)
+
     address = models.ArrayReferenceField(to=Address)
     total_price = Decimal128Field(max_digits=10, decimal_places=2)
 
