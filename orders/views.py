@@ -107,6 +107,7 @@ class SupportTicketMessageViewSet(
     mixins.RetrieveModelMixin,
 ):
     serializer_class = SupportTicketMessageSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         cart_id = self.kwargs["support_ticket_pk"]
