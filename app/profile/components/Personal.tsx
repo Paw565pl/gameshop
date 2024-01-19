@@ -11,10 +11,10 @@ import { useState } from "react";
 
 const Personal = () => {
   const [toast, setToast] = useState<ToastProps | null>(null);
-  const { data: userInfo, isLoading } = useFetchUserInfo();
+  const { data: userInfo, isFetching } = useFetchUserInfo();
   const { mutate: updateUserInfo } = useUpdateUserInfo();
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isFetching) return <p>Loading...</p>;
 
   const initialValues: RegisterUserValues = {
     username: userInfo?.username || "",
@@ -43,6 +43,7 @@ const Personal = () => {
         initialValues={initialValues}
         validationSchema={registerUserSchema}
         onSubmit={handleSubmit}
+        enableReinitialize
       >
         <Form>
           <FormInput labelText="Username" name="username" type="text" />

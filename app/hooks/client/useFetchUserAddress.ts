@@ -3,7 +3,6 @@ import PaginatedResponse from "@/app/entities/PaginatedResponse";
 import authService from "@/app/services/authService";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import ms from "ms";
 
 const fetchUserAddress = async () => {
   const {
@@ -22,7 +21,7 @@ const useFetchUserAddress = () =>
   useQuery<Address | null, AxiosError>({
     queryKey: ["userAddress"],
     queryFn: fetchUserAddress,
-    staleTime: ms("1h"),
+    staleTime: 0,
   });
 
 export default useFetchUserAddress;
