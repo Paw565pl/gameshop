@@ -10,7 +10,7 @@ const GameCardGrid = () => {
   const {
     data: games,
     isSuccess,
-    isFetching,
+    isLoading,
     isError,
     fetchNextPage,
     hasNextPage,
@@ -33,7 +33,7 @@ const GameCardGrid = () => {
         loader={<GameCardSkeleton />}
         className="space-y-4 px-2 pb-4"
       >
-        {isFetching &&
+        {isLoading &&
           skeletons.map((_, index) => <GameCardSkeleton key={index} />)}
         {isSuccess &&
           games.pages.map((page, index) => (
