@@ -11,10 +11,10 @@ import { useState } from "react";
 
 const Personal = () => {
   const [toast, setToast] = useState<ToastProps | null>(null);
-  const { data: userInfo, isFetching } = useFetchUserInfo();
+  const { data: userInfo, isLoading } = useFetchUserInfo();
   const { mutate: updateUserInfo } = useUpdateUserInfo();
 
-  if (isFetching) return <p>Loading...</p>;
+  if (isLoading) return null;
 
   const initialValues: RegisterUserValues = {
     username: userInfo?.username || "",
