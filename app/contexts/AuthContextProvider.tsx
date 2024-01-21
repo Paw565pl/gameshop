@@ -1,7 +1,9 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { ReactNode, createContext, useEffect, useState } from "react";
 import AuthTokens from "../entities/AuthTokens";
+import { userInfoQueryKey } from "../hooks/client/useFetchUserInfo";
 
 interface AuthContext {
   isAuthenticated: boolean;
@@ -17,6 +19,7 @@ export const AuthContext = createContext<AuthContext>({} as AuthContext);
 
 const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const hasTokens =
@@ -36,6 +39,7 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const logoutUser = () => {
     localStorage.removeItem("access-token");
     localStorage.removeItem("refresh-token");
+    queryClient.removeQueries({ queryKey: userInfoQueryKey });
 
     setIsAuthenticated(false);
   };
