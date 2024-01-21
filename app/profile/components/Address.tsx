@@ -9,10 +9,10 @@ import { useState } from "react";
 
 const Address = () => {
   const [toast, setToast] = useState<ToastProps | null>(null);
-  const { data: userAddress, isLoading } = useFetchUserAddress();
+  const { data: userAddress, isFetching } = useFetchUserAddress();
   const { mutate: createOrUpdateUserAddress } = useCreateOrUpdateUserAddress();
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isFetching) return <p>Loading...</p>;
 
   const initialValues: AddressValues = {
     first_name: userAddress?.first_name || "",
