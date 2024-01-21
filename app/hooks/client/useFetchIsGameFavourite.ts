@@ -1,18 +1,23 @@
 import authService from "@/app/services/authService";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import useFetchUserInfo from "./useFetchUserInfo";
+import ms from "ms";
 
 export const fetchIsGameFavourite = async (id: number) => {
   const { status } = await authService.get<boolean>(`favourite-games/${id}`);
   return status === 200 ? true : false;
 };
 
-const useFetchIsGameFavourite = (id: number) =>
-  useQuery<boolean, AxiosError>({
-    queryKey: ["game", id, "isFavourite"],
+const useFetchIsGameFavourite = (id: number) => {
+  const { data: userInfo } = useFetchUserInfo();
+
+  return useQuery<boolean, AxiosError>({
+    queryKey: ["game", id, "isFavourite", userInfo?.id],
     queryFn: () => fetchIsGameFavourite(id),
-    staleTime: 0,
+    staleTime: ms("1h"),
     retry: false,
   });
+};
 
 export default useFetchIsGameFavourite;

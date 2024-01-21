@@ -1,6 +1,7 @@
 import authService from "@/app/services/authService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
+import useFetchUserInfo from "./useFetchUserInfo";
 
 const postFavouriteGame = async (id: number) => {
   const response = await authService.post(`/favourite-games/`, { game_id: id });
@@ -9,12 +10,13 @@ const postFavouriteGame = async (id: number) => {
 
 const useAddFavouriteGame = (id: number) => {
   const queryClient = useQueryClient();
-  const key = ["favouriteGames"];
+  const { data: userInfo } = useFetchUserInfo();
+  const queryKey = ["favouriteGames", userInfo?.id];
 
   return useMutation<AxiosResponse, AxiosError>({
     mutationKey: ["favouriteGames"],
     mutationFn: () => postFavouriteGame(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: key }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
   });
 };
 

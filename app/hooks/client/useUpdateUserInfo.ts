@@ -27,10 +27,10 @@ const updateUserInfo = async (
 };
 
 const useUpdateUserInfo = () => {
-  const key = ["userInfo"];
   const queryClient = useQueryClient();
   const { data: userInfo } = useFetchUserInfo();
   const currentUsername = userInfo?.username;
+  const key = ["userInfo"];
 
   return useMutation<AxiosResponse, AxiosError, RegisterUserValues>({
     mutationKey: key,

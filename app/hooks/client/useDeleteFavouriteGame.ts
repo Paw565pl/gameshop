@@ -7,6 +7,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
+import useFetchUserInfo from "./useFetchUserInfo";
 
 const deleteFavouriteGame = async (id: number) => {
   const response = await authService.delete(`/favourite-games/${id}/`);
@@ -15,7 +16,8 @@ const deleteFavouriteGame = async (id: number) => {
 
 const useDeleteFavouriteGame = (id: number) => {
   const queryClient = useQueryClient();
-  const queryKey = ["favouriteGames"];
+  const { data: userInfo } = useFetchUserInfo();
+  const queryKey = ["favouriteGames", userInfo?.id];
 
   return useMutation<
     AxiosResponse,

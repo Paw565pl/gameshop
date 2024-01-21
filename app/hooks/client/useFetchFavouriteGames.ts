@@ -3,6 +3,8 @@ import PaginatedResponse from "@/app/entities/PaginatedResponse";
 import authService from "@/app/services/authService";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import ms from "ms";
+import useFetchUserInfo from "./useFetchUserInfo";
 
 const fetchFavouriteGames = async (pageNumber: unknown) => {
   const { data } = await authService.get<PaginatedResponse<Game>>(
@@ -16,9 +18,11 @@ const fetchFavouriteGames = async (pageNumber: unknown) => {
   return data;
 };
 
-const useFetchFavouriteGames = () =>
-  useInfiniteQuery<PaginatedResponse<Game>, AxiosError>({
-    queryKey: ["favouriteGames"],
+const useFetchFavouriteGames = () => {
+  const { data: userInfo } = useFetchUserInfo();
+
+  return useInfiniteQuery<PaginatedResponse<Game>, AxiosError>({
+    queryKey: ["favouriteGames", userInfo?.id],
     queryFn: ({ pageParam }) => fetchFavouriteGames(pageParam),
     getNextPageParam: (lastPage) => {
       if (lastPage.next) {
@@ -29,7 +33,8 @@ const useFetchFavouriteGames = () =>
       return undefined;
     },
     initialPageParam: 1,
-    staleTime: 0,
+    staleTime: ms("1h"),
   });
+};
 
 export default useFetchFavouriteGames;
