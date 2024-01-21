@@ -33,7 +33,7 @@ const Favourites = () => {
       hasMore={hasNextPage}
       next={fetchNextPage}
       loader={<GameCardSkeleton />}
-      className="space-y-4 px-1 pb-2"
+      className="space-y-4 px-1 pb-4"
     >
       {isLoading &&
         skeletons.map((_, index) => <GameCardSkeleton key={index} />)}

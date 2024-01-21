@@ -16,7 +16,7 @@ const FavouriteGameCard = ({ game }: FavouriteGameCardProps) => {
   const { mutate: deleteFavouriteGame } = useDeleteFavouriteGame(game.id);
 
   return (
-    <div className="card bg-base-100 shadow-xl md:card-side">
+    <div className="card bg-base-100 shadow-lg md:card-side">
       <GameCardImage
         src={game.background_image}
         name={game.name}
