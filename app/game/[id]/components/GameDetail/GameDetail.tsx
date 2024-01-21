@@ -48,7 +48,7 @@ const GameDetail = async ({ id }: GameDetailProps) => {
         </header>
         <div className="mt-4 space-y-2 xl:mt-0 xl:text-right">
           <div className="text-xl">{game.price} PLN</div>
-          <GameBuy platforms={game.platforms} />
+          <GameBuy gameId={game.id} platforms={game.platforms} />
         </div>
       </div>
       <GameAttributes
