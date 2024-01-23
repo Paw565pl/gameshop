@@ -61,7 +61,7 @@ const OrdersHistory = () => {
                   </div>
                 ))}
               </div>
-              
+
               <div className="divider"></div>
 
               <SupportTicketForm orderId={order.id} />
