@@ -1,7 +1,12 @@
+import { Suspense } from "react";
 import RegisterForm from "./components/RegisterForm";
 
 const RegisterPage = () => {
-  return <RegisterForm />;
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
+  );
 };
 
 export default RegisterPage;
