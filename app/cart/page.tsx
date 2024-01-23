@@ -1,10 +1,10 @@
 import PrivateRoute from "../components/common/PrivateRoute";
-import CartItemsList from "./components/CartItemsList";
+import CartItems from "./components/CartItems";
 
 const CartPage = () => {
   return (
     <PrivateRoute>
-      <CartItemsList />
+      <CartItems />
     </PrivateRoute>
   );
 };
