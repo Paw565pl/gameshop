@@ -78,7 +78,7 @@ const RegisterForm = () => {
           <FormInput labelText="Username" name="username" type="text" />
           <FormInput labelText="E-mail" name="email" type="text" />
           <FormInput labelText="Password" name="password" type="password" />
-          <FormSubmitButton>Sign In</FormSubmitButton>
+          <FormSubmitButton>Sign Up</FormSubmitButton>
         </Form>
       </Formik>
       <p className="mt-2 text-center text-xs">
