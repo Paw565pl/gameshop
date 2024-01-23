@@ -16,6 +16,7 @@ const useFetchUserInfo = () =>
     queryKey: userInfoQueryKey,
     queryFn: fetchUserInfo,
     staleTime: ms("1h"),
+    retry: 1,
   });
 
 export default useFetchUserInfo;

@@ -3,8 +3,8 @@ import PaginatedResponse from "@/app/entities/PaginatedResponse";
 import authService from "@/app/services/authService";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import useFetchUserInfo from "./useFetchUserInfo";
 import ms from "ms";
+import useFetchUserInfo from "./useFetchUserInfo";
 
 const fetchOrCreateCart = async () => {
   const { data } = await authService.get<PaginatedResponse<Cart>>("/carts/");
@@ -23,6 +23,7 @@ const useFetchOrCreateCart = () => {
     queryKey: ["userCart", userInfo?.id],
     queryFn: fetchOrCreateCart,
     staleTime: ms("1h"),
+    retry: 1,
   });
 };
 
