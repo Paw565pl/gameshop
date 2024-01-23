@@ -10,7 +10,7 @@ interface Item {
   slug: string;
 }
 
-interface SelectFilterProps {
+interface RadioFilterProps {
   title: string;
   selected: string;
   data: InfiniteData<PaginatedResponse<Item>> | undefined;
@@ -24,7 +24,7 @@ const RadioFilter = ({
   data,
   fetchNextPage,
   handleChange,
-}: SelectFilterProps) => {
+}: RadioFilterProps) => {
   const items = useMemo(
     () => data?.pages.flatMap((page) => page.results),
     [data],
@@ -34,7 +34,7 @@ const RadioFilter = ({
     <div className="mb-4 flex flex-col justify-center">
       <h4 className="mb-1 text-center text-sm">{title}</h4>
       <div className="form-control">
-        <label className="label cursor-pointer justify-normal text-xs">
+        <label className="label w-max cursor-pointer justify-normal text-xs">
           <input
             type="radio"
             name={title}
@@ -48,7 +48,7 @@ const RadioFilter = ({
       </div>
       {items?.map((item) => (
         <div key={item.id} className="form-control">
-          <label className="label cursor-pointer justify-normal text-xs">
+          <label className="label w-max cursor-pointer justify-normal text-xs">
             <input
               type="radio"
               name={title}
