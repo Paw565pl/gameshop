@@ -54,7 +54,7 @@ const LoginForm = () => {
   return (
     <>
       {toast && <Toast variant={toast.variant}>{toast.children}</Toast>}
-      <h1 className="mb-4 text-center text-6xl font-bold">Login Form</h1>
+      <h2 className="mb-4 text-center text-6xl font-bold">Login Form</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={loginUserSchema}
