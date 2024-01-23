@@ -13,6 +13,11 @@ const CartItemsList = () => {
       {cart?.items.map((cartItem) => (
         <CartItemCard key={cartItem.id} cartItem={cartItem} />
       ))}
+      {cart?.total_price && (
+        <div className="w-full pr-4 text-right text-xl font-medium">
+          Final price: {cart?.total_price} PLN
+        </div>
+      )}
     </section>
   );
 };
