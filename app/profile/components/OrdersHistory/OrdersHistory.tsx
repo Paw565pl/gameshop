@@ -1,9 +1,10 @@
 import GameCardImage from "@/app/components/gameCard/GameCardImage";
 import GameCardTitle from "@/app/components/gameCard/GameCardTitle";
 import useFetchOrders from "@/app/hooks/client/useFetchOrders";
+import SupportTicketForm from "./SupportTicketForm";
 
 const OrdersHistory = () => {
-  const { data: orders, fetchNextPage, isLoading } = useFetchOrders();
+  const { data: orders, isLoading, fetchNextPage } = useFetchOrders();
 
   if (isLoading) return null;
 
@@ -17,7 +18,7 @@ const OrdersHistory = () => {
         page.results.map((order) => (
           <div key={order.id} className="card bordered">
             <div className="card-body">
-              <h2 className="card-title">Order ({order.id})</h2>
+              <h2 className="card-title text-2xl">Order ({order.id})</h2>
               <dl className="grid grid-cols-2 gap-2">
                 <dt>Status:</dt>
                 <dd>{order.status}</dd>
@@ -40,7 +41,9 @@ const OrdersHistory = () => {
                 <dt>Total price:</dt>
                 <dd>{order.total_price} PLN</dd>
               </dl>
+
               <div className="divider"></div>
+
               <div className="grid grid-cols-2 justify-center gap-4">
                 {order.items.map((item) => (
                   <div key={item.id} className="card items-center shadow-lg">
@@ -58,6 +61,10 @@ const OrdersHistory = () => {
                   </div>
                 ))}
               </div>
+              
+              <div className="divider"></div>
+
+              <SupportTicketForm orderId={order.id} />
             </div>
           </div>
         )),
