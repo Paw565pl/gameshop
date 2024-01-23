@@ -9,6 +9,10 @@ Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY")
 
+CORS_ALLOWED_ORIGINS = [
+    "https://gameshop-frontend.onrender.com",
+]
+
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 RENDER_EXTERNAL_HOSTNAME = env("RENDER_EXTERNAL_HOSTNAME")
