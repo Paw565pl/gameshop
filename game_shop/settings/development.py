@@ -1,4 +1,4 @@
-from .common import *
+from .common import *  # noqa: F403
 from os import environ
 from datetime import timedelta
 
@@ -28,4 +28,7 @@ DATABASES = {
     }
 }
 
-SIMPLE_JWT = {"ACCESS_TOKEN_LIFETIME": timedelta(days=365)}
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=365),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
+}
