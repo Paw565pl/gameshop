@@ -68,8 +68,6 @@ class Command(BaseCommand):
             Game.objects.bulk_create(games_objects)
 
         except Exception as e:
-            raise CommandError(
-               f"something went wrong! {e}"
-            )
+            raise CommandError(f"something went wrong! {e}")
 
         self.stdout.write("done!")
