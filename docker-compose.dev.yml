@@ -10,6 +10,15 @@ services:
       - MONGO_HOST=database
     depends_on:
       - database
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app/
+          ignore:
+            - .venv/
+        - action: rebuild
+          path: pyproject.toml
 
   database:
     image: mongo:7-jammy
