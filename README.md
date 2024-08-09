@@ -8,14 +8,15 @@
 
 It is fairly simple thanks to docker. Simply run this command after **cloning the repository**.
 
-```bash
-docker compose up --build -d
+```sh
+docker compose -f docker-compose.dev.yml up --build --watch
 ```
 
 You can optionally seed the database.
 
-```bash
+```sh
 docker exec -t backend-paw565pl-app-1 python manage.py seed_db
 ```
 
-That's all! Now simply hit [http://localhost:8000](http://localhost:8000) and explore.
+That's all! Now simply hit [http://localhost:8000/](http://localhost:8000/) and explore. API is
+documented on this URL [http://localhost:8000/schema/swagger-ui/](http://localhost:8000/schema/swagger-ui/).
