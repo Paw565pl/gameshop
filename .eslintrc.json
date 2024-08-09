@@ -1,9 +1,15 @@
 {
   "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/strict",
+    "plugin:@typescript-eslint/stylistic",
     "next/core-web-vitals",
-    "plugin:jsx-a11y/recommended",
-    "prettier",
-    "plugin:@tanstack/eslint-plugin-query/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/strict",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
+    "prettier"
   ],
-  "plugins": ["jsx-a11y"]
+  "plugins": ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "root": true
 }
