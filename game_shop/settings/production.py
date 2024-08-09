@@ -1,13 +1,15 @@
-from .common import *
+from .common import *  # noqa: F403
 from environ import Env
 
 env = Env(
     RENDER_EXTERNAL_HOSTNAME=(str, None),
     DJANGO_LOG_LEVEL=(str, "WARNING"),
 )
-Env.read_env(BASE_DIR / ".env")
+Env.read_env(BASE_DIR / ".env")  # noqa: F405
 
 SECRET_KEY = env("SECRET_KEY")
+
+DEBUG = False
 
 CORS_ALLOWED_ORIGINS = [
     "https://gameshop-frontend.onrender.com",
@@ -33,13 +35,9 @@ DATABASES = {
     }
 }
 
-MIDDLEWARE.insert(2, "whitenoise.middleware.WhiteNoiseMiddleware")
+MIDDLEWARE.insert(2, "whitenoise.middleware.WhiteNoiseMiddleware")  # noqa: F405
 
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 CSRF_COOKIE_SECURE = True
 
