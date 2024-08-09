@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const apiService = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_GAME_SHOP_API_URL}/api`,
-});
+const baseURL =
+  process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL;
+
+const apiService = axios.create({ baseURL });
 
 export default apiService;
