@@ -1,18 +1,28 @@
 FROM python:3.12-alpine
 
-RUN adduser -S app
-RUN addgroup app && addgroup app app
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_HOME='/usr/local' \
+    POETRY_VERSION=1.8.3 \
+    DJANGO_SETTINGS_MODULE=storefront.settings.production
+
+RUN apk add curl
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /app
 
-RUN apk add curl
-RUN curl -sSL https://install.python-poetry.org | python3
-ENV POETRY_VIRTUALENVS_CREATE=false
-
 COPY poetry.lock pyproject.toml ./
 
-RUN /root/.local/share/pypoetry/venv/bin/poetry install --all-extras --compile
+RUN poetry install --without dev --compile --no-root
 
 COPY . .
 
-CMD sh -c "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn -b 0.0.0.0:8000 game_shop.wsgi"
+RUN DJANGO_SETTINGS_MODULE=storefront.settings.common python manage.py collectstatic --no-input
+
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+
+USER appuser
+
+CMD ["sh", "-c", "python manage.py migrate && gunicorn -b 0.0.0.0:8000 --workers 8 game_shop.wsgi"]
