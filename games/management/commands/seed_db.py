@@ -10,7 +10,7 @@ class Command(BaseCommand):
     help = "seeds database with the sample data"
 
     def handle(self, *args, **options):
-        print("seeding the database...")
+        self.stdout.write("seeding the database...")
 
         try:
             with open("./data/data.json", "r") as f:
@@ -67,9 +67,9 @@ class Command(BaseCommand):
 
             Game.objects.bulk_create(games_objects)
 
-        except Exception:
+        except Exception as e:
             raise CommandError(
-                "something went wrong! maybe there is already data in the database"
+               f"something went wrong! {e}"
             )
 
-        print("done!")
+        self.stdout.write("done!")
