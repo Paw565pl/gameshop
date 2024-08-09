@@ -3,8 +3,8 @@ import PaginatedResponse from "@/app/entities/PaginatedResponse";
 import authService from "@/app/services/authService";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import useFetchUserInfo from "./useFetchUserInfo";
 import ms from "ms";
+import useFetchUserInfo from "./useFetchUserInfo";
 
 const fetchUserAddress = async () => {
   const { data } =

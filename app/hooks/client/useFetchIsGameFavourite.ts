@@ -1,8 +1,8 @@
 import authService from "@/app/services/authService";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import useFetchUserInfo from "./useFetchUserInfo";
 import ms from "ms";
+import useFetchUserInfo from "./useFetchUserInfo";
 
 export const fetchIsGameFavourite = async (id: number) => {
   const { status } = await authService.get<boolean>(`favourite-games/${id}`);
