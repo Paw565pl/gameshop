@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     "djoser",
     "rest_framework_simplejwt",
     "drf_spectacular",
-    "drf_spectacular_sidecar",
     "core",
     "games",
     "orders",
@@ -126,7 +125,6 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    "SWAGGER_UI_DIST": "SIDECAR",
-    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
-    "REDOC_DIST": "SIDECAR",
+    "TITLE": "GameShop",
+    "VERSION": "1.0.0",
 }
