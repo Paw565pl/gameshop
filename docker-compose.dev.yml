@@ -1,0 +1,54 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - API_BASE_URL=http://backend:8000/api
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/api
+    depends_on:
+      - backend
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app/
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    restart: always
+    ports:
+      - 8000:8000
+    environment:
+      - MONGO_HOST=database
+    depends_on:
+      - database
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /app/
+          ignore:
+            - .venv/
+        - action: rebuild
+          path: pyproject.toml
+
+  database:
+    image: mongo:7-jammy
+    ports:
+      - 27017:27017
+    restart: always
+    volumes:
+      - mongodb-data:/data/db
+
+volumes:
+  mongodb-data:
